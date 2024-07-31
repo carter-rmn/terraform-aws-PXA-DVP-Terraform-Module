@@ -1,0 +1,94 @@
+{
+    "vpc": {
+        "create": true,
+        "existing": {
+            "id": "",
+            "default_security_group_id": "",
+            "subnet_ids": {
+                "private": [],
+                "public": [],
+                "database": []
+            },
+            "cidr_blocks": {
+                "private": [],
+                "public": [],
+                "database": []
+            }
+        },
+        "new": {
+            "cidr": "10.1.0.0/16",
+            "azs": [
+                "us-east-1a",
+                "us-east-1b",
+                "us-east-1c"
+            ],
+            "subnets": {
+                "private": [
+                    "10.1.1.0/24",
+                    "10.1.2.0/24",
+                    "10.1.3.0/24"
+                ],
+                "public": [
+                    "10.1.4.0/24",
+                    "10.1.5.0/24",
+                    "10.1.6.0/24"
+                ],
+                "database": [
+                    "10.1.7.0/24",
+                    "10.1.8.0/24"
+                ]
+            }
+        }
+    },
+    "eks_node_group": {
+        "instance_type": "t3a.micro",
+        "desired_size":"3",
+        "max_size":"6",
+        "min_size":"3"
+    },
+    "api_gateway": {
+        "authenticate_uri": "https://dev-pxa.trycarter.com/api/integrations/pixel/token",
+        "geolocation_uri":"https://dev-pxa.trycarter.com/api/metadata/search-ip"
+    },
+    "ec2": {
+        "ami": "ami-04a81a99f5ec58529", 
+        "instances": {
+            "bastion": {
+                "instance_type": "t2.micro",
+                "subnet_index": 0,
+                "volume_size": 32,
+                "public": true
+            },
+            "cicd": {
+                "instance_type": "t2.micro",
+                "subnet_index": 0,
+                "volume_size": 10,
+                "public": true
+            },
+            "mongo-1": {
+                "instance_type": "t2.medium",
+                "subnet_index": 0,
+                "volume_size": 128,
+                "public": true
+            },
+            "mongo-2": {
+                "instance_type": "t2.medium",
+                "subnet_index": 0,
+                "volume_size": 256,
+                "public": true
+            },
+            "mongo-3": {
+                "instance_type": "t2.medium",
+                "subnet_index": 0,
+                "volume_size": 256,
+                "public": true
+            }          
+        }
+    },
+    "msk": {
+        "instance_type": "kafka.t3.small",
+        "number_of_broker_nodes": 3,
+        "volume_size": 64,
+        "retention_period": ""
+    }
+}
