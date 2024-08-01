@@ -16,11 +16,11 @@ resource "aws_secretsmanager_secret_version" "secret" {
       region = var.AWS_REGION
     }
     vpc = {
-      id = local.vpc.id
+      id = vars.vpc.id
       subnets = {
-        private  = join(",", local.vpc.subnets.private)
-        database = join(",", local.vpc.subnets.database)
-        public   = join(",", local.vpc.subnets.public)
+        private  = join(",", vars.vpc.subnets.private)
+        database = join(",", vars.vpc.subnets.database)
+        public   = join(",", vars.vpc.subnets.public)
       }
     }
     msk = {

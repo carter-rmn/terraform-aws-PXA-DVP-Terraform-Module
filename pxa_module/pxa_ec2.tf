@@ -6,11 +6,11 @@ resource "aws_instance" "ec2s" {
   key_name      = "${local.pxa_prefix}-ec2-${element(split("-", each.key), 0)}"
 
   vpc_security_group_ids = compact([
-    local.vpc.default_security_group.id,
+    vars.vpc.default_security_group.id,
     aws_security_group.sg_allow_ssh.id,
     local.ec2.security_groups[element(split("-", each.key), 0)]
   ])
-  subnet_id = element(each.value.public ? (local.vpc.subnets.public) : (local.vpc.subnets.private), each.value.subnet_index)
+  subnet_id = element(each.value.public ? (vars.vpc.subnets.public) : (vars.vpc.subnets.private), each.value.subnet_index)
 
   associate_public_ip_address = each.value.public
 

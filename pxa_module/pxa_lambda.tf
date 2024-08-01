@@ -8,7 +8,7 @@ resource "aws_lambda_function" "lambdas" {
   timeout       = 7
 
   vpc_config {
-    subnet_ids         = local.vpc.subnets.private
+    subnet_ids         = vars.vpc.subnets.private
     security_group_ids = [aws_security_group.sg_lambda.id]
   }
 
@@ -28,7 +28,7 @@ resource "aws_lambda_function" "lambdas" {
 resource "aws_lambda_layer_version" "event_layer" {
   filename   = "layers/lambda_layer.zip"
   layer_name = "event-layer"
-  
+
   compatible_runtimes = ["python3.11"]
 }
 

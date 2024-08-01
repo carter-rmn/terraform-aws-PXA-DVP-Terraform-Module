@@ -1,4 +1,5 @@
 resource "aws_eks_cluster" "eks" {
+  count                     = var.eks.create ? 1 : 0
   name                      = "${local.pxa_prefix}-eks"
   enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
   role_arn                  = aws_iam_role.role_eks.arn
@@ -6,7 +7,7 @@ resource "aws_eks_cluster" "eks" {
 
   vpc_config {
     endpoint_public_access = true
-    subnet_ids             = local.vpc.subnets.private
+    subnet_ids             = vars.vpc.subnets.private
   }
 
   tags = {
@@ -22,7 +23,7 @@ resource "aws_eks_node_group" "eks_node_group" {
   cluster_name    = aws_eks_cluster.eks.name
   node_group_name = "${local.pxa_prefix}-eks-node-group"
   node_role_arn   = aws_iam_role.role_eks_node.arn
-  subnet_ids      = local.vpc.subnets.private
+  subnet_ids      = vars.vpc.subnets.private
 
   scaling_config {
     desired_size = local.pxa_config.eks_node_group.desired_size
@@ -30,7 +31,7 @@ resource "aws_eks_node_group" "eks_node_group" {
     min_size     = local.pxa_config.eks_node_group.min_size
   }
 
-  instance_types = [local.pxa_config.eks_node_group.instance_type]  
+  instance_types = [local.pxa_config.eks_node_group.instance_type]
 
   tags = {
     Name        = "${local.pxa_prefix}-eks-node-group"
