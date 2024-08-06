@@ -52,7 +52,13 @@ variable "eks" {
 
 variable "ec2" {
   type = object({
-
+    ami = string
+    instances = map(object({
+      isntance_type = string
+      subnet_index  = number
+      volume_size   = number
+      public        = bool
+    }))
   })
 }
 
