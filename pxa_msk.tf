@@ -2,14 +2,14 @@ resource "aws_msk_cluster" "msk" {
   count                  = var.msk.create ? 1 : 0
   cluster_name           = "${local.pxa_prefix}-msk"
   kafka_version          = "3.6.0"
-  number_of_broker_nodes = local.pxa_config.msk.number_of_broker_nodes
+  number_of_broker_nodes = vars.msk.number_of_broker_nodes  
 
   broker_node_group_info {
-    instance_type  = local.pxa_config.msk.instance_type
+    instance_type  = vars.msk.instance_type
     client_subnets = vars.vpc.subnets.private
     storage_info {
       ebs_storage_info {
-        volume_size = local.pxa_config.msk.volume_size
+        volume_size = vars.msk.volume_size
       }
     }
     security_groups = [aws_security_group.sg_allow_msk.id]

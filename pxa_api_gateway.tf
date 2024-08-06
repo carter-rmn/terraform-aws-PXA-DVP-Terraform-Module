@@ -221,7 +221,7 @@ resource "aws_api_gateway_integration" "authenticate_integration" {
   http_method             = aws_api_gateway_method.authenticate_method.http_method
   integration_http_method = "POST"
   type                    = "HTTP_PROXY"
-  uri                     = local.pxa_config.api_gateway.authenticate_uri  
+  uri                     = vars.api_gateway.authenticate_uri   
 }
 
 # /api/geolocation
@@ -244,7 +244,7 @@ resource "aws_api_gateway_integration" "geolocation_integration" {
   http_method             = aws_api_gateway_method.geolocation_method.http_method
   integration_http_method = "GET"
   type                    = "HTTP_PROXY"
-  uri                     = local.pxa_config.api_gateway.geolocation_uri
+  uri                     = vars.api_gateway.geolocation_uri
 }
 
 resource "aws_api_gateway_deployment" "deployment" {

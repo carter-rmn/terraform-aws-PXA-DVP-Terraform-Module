@@ -1,7 +1,6 @@
 locals {
   pxa_project_name = "pxa"
   pxa_prefix       = "${local.pxa_project_name}-${var.PROJECT_CUSTOMER}-${var.PROJECT_ENV}"
-  pxa_config       = jsondecode(data.local_file.pxa_config.content)
 
   ec2 = {
     security_groups : {
