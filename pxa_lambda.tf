@@ -8,7 +8,7 @@ resource "aws_lambda_function" "lambdas" {
   timeout       = 7
 
   vpc_config {
-    subnet_ids         = vars.vpc.subnets.private
+    subnet_ids         = var.vpc.subnets.private
     security_group_ids = [aws_security_group.sg_lambda.id]
   }
 

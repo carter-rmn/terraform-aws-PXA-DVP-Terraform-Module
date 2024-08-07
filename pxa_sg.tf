@@ -3,13 +3,13 @@ resource "aws_security_group" "sg_allow_msk" {
   name        = "${local.pxa_prefix}-sg-allow-msk"
   description = "Allow MSK traffic"
 
-  vpc_id = vars.vpc.id
+  vpc_id = var.vpc.id
 
   ingress {
     from_port   = 9092
     to_port     = 9092
     protocol    = "tcp"
-    cidr_blocks = concat(vars.vpc.cidr_blocks.private, vars.vpc.cidr_blocks.database, vars.vpc.cidr_blocks.public)
+    cidr_blocks = concat(var.vpc.cidr_blocks.private, var.vpc.cidr_blocks.database, var.vpc.cidr_blocks.public)
   }
 
   egress {
@@ -33,13 +33,13 @@ resource "aws_security_group" "sg_allow_ssh" {
   name        = "${local.pxa_prefix}-sg-allow-ssh"
   description = "Allow SSH traffic"
 
-  vpc_id = vars.vpc.id
+  vpc_id = var.vpc.id
 
   ingress {
     from_port   = 22 // todo needs to be configurable
     to_port     = 22 // todo needs to be configurable
     protocol    = "tcp"
-    cidr_blocks = concat(vars.vpc.cidr_blocks.private, vars.vpc.cidr_blocks.database, vars.vpc.cidr_blocks.public)
+    cidr_blocks = concat(var.vpc.cidr_blocks.private, var.vpc.cidr_blocks.database, var.vpc.cidr_blocks.public)
   }
 
   egress {
@@ -62,7 +62,7 @@ resource "aws_security_group" "sg_bastion" {
   name        = "${local.pxa_prefix}-sg-bastion"
   description = "Allow Bastion Connection"
 
-  vpc_id = vars.vpc.id
+  vpc_id = var.vpc.id
 
   ingress {
     from_port   = 22
@@ -91,7 +91,7 @@ resource "aws_security_group" "sg_lambda" {
   name        = "${local.pxa_prefix}-sg-lambda"
   description = "Allow Lambda Function Access"
 
-  vpc_id = vars.vpc.id
+  vpc_id = var.vpc.id
 
   ingress {
     from_port   = 0
@@ -120,13 +120,13 @@ resource "aws_security_group" "sg_cicd" {
   name        = "${local.pxa_prefix}-sg-cicd"
   description = "Allow CICD Connection"
 
-  vpc_id = vars.vpc.id
+  vpc_id = var.vpc.id
 
   ingress {
     from_port   = 0
     to_port     = 0
     protocol    = "tcp"
-    cidr_blocks = concat(vars.vpc.cidr_blocks.private, vars.vpc.cidr_blocks.database, vars.vpc.cidr_blocks.public)
+    cidr_blocks = concat(var.vpc.cidr_blocks.private, var.vpc.cidr_blocks.database, var.vpc.cidr_blocks.public)
   }
 
   egress {
@@ -149,13 +149,13 @@ resource "aws_security_group" "sg_mongo" {
   name        = "${local.pxa_prefix}-sg-mongo"
   description = "Allow Mongo Connection"
 
-  vpc_id = vars.vpc.id
+  vpc_id = var.vpc.id
 
   ingress {
     from_port   = 27017
     to_port     = 27017
     protocol    = "tcp"
-    cidr_blocks = concat(vars.vpc.cidr_blocks.private, vars.vpc.cidr_blocks.database, vars.vpc.cidr_blocks.public)
+    cidr_blocks = concat(var.vpc.cidr_blocks.private, var.vpc.cidr_blocks.database, var.vpc.cidr_blocks.public)
   }
 
   egress {

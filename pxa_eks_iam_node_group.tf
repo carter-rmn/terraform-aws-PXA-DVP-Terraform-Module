@@ -1,5 +1,6 @@
 resource "aws_iam_role" "role_eks_node" {
-  name = "${local.pxa_prefix}-iam-role-eks-node"
+  count   = var.eks.create ? 1 : 0
+  name    = "${local.pxa_prefix}-iam-role-eks-node"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -24,26 +25,31 @@ resource "aws_iam_role" "role_eks_node" {
 }
 
 resource "aws_iam_role_policy_attachment" "attachment_eks_worker_node" {
+  count      = var.eks.create ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = aws_iam_role.role_eks_node.name
 }
 
 resource "aws_iam_role_policy_attachment" "attachment_cni_policy" {
+  count      = var.eks.create ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   role       = aws_iam_role.role_eks_node.name
 }
 
 resource "aws_iam_role_policy_attachment" "attachment_ec2_container_registry" {
+  count      = var.eks.create ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.role_eks_node.name
 }
 
 resource "aws_iam_role_policy_attachment" "attachment_cloudwatch_log" {
+  count      = var.eks.create ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
   role       = aws_iam_role.role_eks_node.name
 }
 
 resource "aws_iam_policy" "s3_access_policy" {
+  count       = var.eks.create ? 1 : 0
   name        = "${local.pxa_prefix}-s3-access-policy"
   description = "Policy to allow access to the S3 bucket created for the project"
 
@@ -68,11 +74,13 @@ resource "aws_iam_policy" "s3_access_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "attachment_s3_access" {
+  count      = var.eks.create ? 1 : 0
   policy_arn = aws_iam_policy.s3_access_policy.arn
   role       = aws_iam_role.role_eks_node.name
 }
 
 resource "aws_iam_policy" "secrets_manager_read_policy" {
+  count       = var.eks.create ? 1 : 0
   name        = "${local.pxa_prefix}-secrets-manager-read-policy"
   description = "Policy to allow read access to Secrets Manager secrets"
 
@@ -93,6 +101,7 @@ resource "aws_iam_policy" "secrets_manager_read_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "attachment_secrets_manager_read" {
+  count      = var.eks.create ? 1 : 0
   policy_arn = aws_iam_policy.secrets_manager_read_policy.arn
   role       = aws_iam_role.role_eks_node.name
 }

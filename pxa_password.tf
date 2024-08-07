@@ -16,11 +16,11 @@ resource "aws_secretsmanager_secret_version" "secret" {
       region = var.AWS_REGION
     }
     vpc = {
-      id = vars.vpc.id
+      id = var.vpc.id
       subnets = {
-        private  = join(",", vars.vpc.subnets.private)
-        database = join(",", vars.vpc.subnets.database)
-        public   = join(",", vars.vpc.subnets.public)
+        private  = join(",", var.vpc.subnets.private)
+        database = join(",", var.vpc.subnets.database)
+        public   = join(",", var.vpc.subnets.public)
       }
     }
     msk = {
@@ -30,6 +30,10 @@ resource "aws_secretsmanager_secret_version" "secret" {
     }
     keyspace = {
       name = aws_keyspaces_keyspace.keyspace.name
+    }
+    s3_user = {
+      access_key = aws_iam_access_key.s3_user_key.id
+      secret_key = aws_iam_access_key.s3_user_key.secret
     }
   })
 }

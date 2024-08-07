@@ -1,16 +1,16 @@
 resource "aws_instance" "ec2s" {
-  for_each = local.pxa_config.ec2.instances
+  for_each = var.ec2.instances
 
-  ami           = local.pxa_config.ec2.ami
+  ami           = var.ec2.ami
   instance_type = each.value.instance_type
   key_name      = "${local.pxa_prefix}-ec2-${element(split("-", each.key), 0)}"
 
   vpc_security_group_ids = compact([
-    vars.vpc.default_security_group.id,
+    var.vpc.default_security_group.id,
     aws_security_group.sg_allow_ssh.id,
     local.ec2.security_groups[element(split("-", each.key), 0)]
   ])
-  subnet_id = element(each.value.public ? (vars.vpc.subnets.public) : (vars.vpc.subnets.private), each.value.subnet_index)
+  subnet_id = element(each.value.public ? (var.vpc.subnets.public) : (var.vpc.subnets.private), each.value.subnet_index)
 
   associate_public_ip_address = each.value.public
 

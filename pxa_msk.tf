@@ -6,7 +6,7 @@ resource "aws_msk_cluster" "msk" {
 
   broker_node_group_info {
     instance_type  = vars.msk.instance_type
-    client_subnets = vars.vpc.subnets.private
+    client_subnets = var.vpc.subnets.private
     storage_info {
       ebs_storage_info {
         volume_size = vars.msk.volume_size
@@ -45,7 +45,8 @@ resource "aws_msk_cluster" "msk" {
 }
 
 resource "aws_cloudwatch_log_group" "lg_msk" {
-  name = "/aws/msk/${local.pxa_prefix}"
+  count  = var.msk.create ? 1 : 0
+  name   = "/aws/msk/${local.pxa_prefix}"
 
   tags = {
     Name        = "${local.pxa_prefix}-lg-msk"
@@ -57,6 +58,7 @@ resource "aws_cloudwatch_log_group" "lg_msk" {
 }
 
 resource "aws_msk_configuration" "msk_config" {
+  count          = var.msk.create ? 1 : 0
   kafka_versions = ["3.4.0"]
   name           = "${local.pxa_prefix}-msk-config"
 
