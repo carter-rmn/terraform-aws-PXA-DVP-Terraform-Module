@@ -45,5 +45,5 @@ resource "aws_eks_node_group" "eks_node_group" {
 
 data "tls_certificate" "eks" {
   count = var.eks.create ? 1 : 0
-  url   = local.eks.eks_oidc_url
+  url   = local.eks_oidc_url
 }
