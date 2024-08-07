@@ -1,5 +1,6 @@
 # MSK
 resource "aws_security_group" "sg_allow_msk" {
+  count       = var.msk.create ? 1 : 0
   name        = "${local.pxa_prefix}-sg-allow-msk"
   description = "Allow MSK traffic"
 
