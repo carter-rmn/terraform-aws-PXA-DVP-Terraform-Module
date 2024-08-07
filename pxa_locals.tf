@@ -18,6 +18,7 @@ locals {
     "imagetag" : "IMMUTABLE"
   }
 
-  eks_oidc_url = var.eks.create ? aws_eks_cluster.eks[0].identity[0].oidc[0].issuer : null
+  eks_oidc_url = var.eks.create ? aws_eks_cluster.eks[0].identity[0].oidc[0].issuer : ""
+  eks_oidc_arn = var.eks.create ? aws_iam_openid_connect_provider.eks[0].arn : ""
 
 }
