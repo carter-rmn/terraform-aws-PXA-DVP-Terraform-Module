@@ -2,7 +2,7 @@ resource "aws_eks_cluster" "eks" {
   count                     = var.eks.create ? 1 : 0
   name                      = "${local.pxa_prefix}-eks"
   enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
-  role_arn                  = aws_iam_role.role_eks.arn
+  role_arn                  = aws_iam_role.role_eks[count.index].arn
   version                   = "1.29"
 
   vpc_config {
@@ -21,9 +21,9 @@ resource "aws_eks_cluster" "eks" {
 
 resource "aws_eks_node_group" "eks_node_group" {
   count           = var.eks.create ? 1 : 0
-  cluster_name    = aws_eks_cluster.eks.name
+  cluster_name    = aws_eks_cluster.eks[count.index].name
   node_group_name = "${local.pxa_prefix}-eks-node-group"
-  node_role_arn   = aws_iam_role.role_eks_node.arn
+  node_role_arn   = aws_iam_role.role_eks_node[count.index].arn
   subnet_ids      = var.vpc.subnets.private
 
   scaling_config {
@@ -44,5 +44,6 @@ resource "aws_eks_node_group" "eks_node_group" {
 }
 
 data "tls_certificate" "eks" {
-  url = aws_eks_cluster.eks.identity.0.oidc.0.issuer
+  count = var.eks.create ? 1 : 0
+  url   = local.eks_oidc_url
 }

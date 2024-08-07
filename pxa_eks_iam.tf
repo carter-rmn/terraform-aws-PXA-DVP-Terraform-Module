@@ -1,8 +1,8 @@
 resource "aws_iam_openid_connect_provider" "eks" {
   count           = var.eks.create ? 1 : 0
   client_id_list  = ["sts.amazonaws.com"]
-  thumbprint_list = [data.tls_certificate.eks.certificates.0.sha1_fingerprint]
-  url             = aws_eks_cluster.eks.identity.0.oidc.0.issuer
+  thumbprint_list = [data.tls_certificate.eks[count.index].certificates.0.sha1_fingerprint]
+  url             = aws_eks_cluster.eks[count.index].identity.0.oidc.0.issuer
 
   tags = {
     Name        = "${local.pxa_prefix}-oidcp"
@@ -42,17 +42,17 @@ resource "aws_iam_role" "role_eks" {
 resource "aws_iam_role_policy_attachment" "attachment_eks_cluster" {
   count      = var.eks.create ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.role_eks.name
+  role       = aws_iam_role.role_eks[count.index].name
 }
 
 resource "aws_iam_role_policy_attachment" "attachment_eks_vpc" {
   count      = var.eks.create ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-  role = aws_iam_role.role_eks.name
+  role = aws_iam_role.role_eks[count.index].name
 }
 
 resource "aws_iam_role_policy_attachment" "attachment_ecr_access" {
   count      = var.eks.create ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = aws_iam_role.role_eks.name
+  role       = aws_iam_role.role_eks[count.index].name
 }

@@ -1,4 +1,5 @@
 resource "aws_iam_role" "role_role_lb_controller" {
+  count              = var.eks.create ? 1 : 0
   name               = "${local.pxa_prefix}-iam-role-lb-controller"
   assume_role_policy = data.aws_iam_policy_document.aws_load_balancer_controller_assume_role_policy.json
   lifecycle {
@@ -15,8 +16,9 @@ resource "aws_iam_role" "role_role_lb_controller" {
 }
 
 resource "aws_iam_policy" "policy_lb_controller" {
+  count  = var.eks.create ? 1 : 0
   name   = "${local.pxa_prefix}-iam-policy-lb-controller"
-  policy = file("./data/AWSLoadBalancerController.json")
+  policy = file("${path.module}/data/AWSLoadBalancerController.json")
 
   tags = {
     Name        = "${local.pxa_prefix}-iam-policy-lb-controller"
@@ -28,8 +30,9 @@ resource "aws_iam_policy" "policy_lb_controller" {
 }
 
 resource "aws_iam_role_policy_attachment" "aws_load_balancer_controller_attach" {
-  role       = aws_iam_role.role_role_lb_controller.name
-  policy_arn = aws_iam_policy.policy_lb_controller.arn
+  count      = var.eks.create ? 1 : 0
+  role       = aws_iam_role.role_role_lb_controller[count.index].name
+  policy_arn = aws_iam_policy.policy_lb_controller[count.index].arn
 }
 
 data "aws_iam_policy_document" "aws_load_balancer_controller_assume_role_policy" {
@@ -39,17 +42,17 @@ data "aws_iam_policy_document" "aws_load_balancer_controller_assume_role_policy"
 
     condition {
       test     = "StringEquals"
-      variable = "${replace(aws_iam_openid_connect_provider.eks.url, "https://", "")}:sub"
+      variable = "${replace(local.eks_oidc_url, "https://", "")}:sub"
       values   = ["system:serviceaccount:kube-system:aws-load-balancer-controller"]
     }
     condition {
       test     = "StringEquals"
-      variable = "${replace(aws_iam_openid_connect_provider.eks.url, "https://", "")}:aud"
+      variable = "${replace(local.eks_oidc_url, "https://", "")}:aud"
       values   = ["sts.amazonaws.com"]
     }
 
     principals {
-      identifiers = [aws_iam_openid_connect_provider.eks.arn]
+      identifiers = [local.eks_oidc_url]
       type        = "Federated"
     }
   }

@@ -2,29 +2,29 @@ resource "aws_msk_cluster" "msk" {
   count                  = var.msk.create ? 1 : 0
   cluster_name           = "${local.pxa_prefix}-msk"
   kafka_version          = "3.6.0"
-  number_of_broker_nodes = vars.msk.number_of_broker_nodes  
+  number_of_broker_nodes = var.msk.number_of_broker_nodes  
 
   broker_node_group_info {
-    instance_type  = vars.msk.instance_type
+    instance_type  = var.msk.instance_type
     client_subnets = var.vpc.subnets.private
     storage_info {
       ebs_storage_info {
-        volume_size = vars.msk.volume_size
+        volume_size = var.msk.volume_size
       }
     }
-    security_groups = [aws_security_group.sg_allow_msk.id]
+    security_groups = [aws_security_group.sg_allow_msk[count.index].id]
   }
   logging_info {
     broker_logs {
       cloudwatch_logs {
         enabled   = true
-        log_group = aws_cloudwatch_log_group.lg_msk.name
+        log_group = aws_cloudwatch_log_group.lg_msk[count.index].name
       }
     }
   }
   configuration_info {
-    arn      = aws_msk_configuration.msk_config.arn
-    revision = aws_msk_configuration.msk_config.latest_revision
+    arn      = aws_msk_configuration.msk_config[count.index].arn
+    revision = aws_msk_configuration.msk_config[count.index].latest_revision
   }
   encryption_info {
     encryption_in_transit {

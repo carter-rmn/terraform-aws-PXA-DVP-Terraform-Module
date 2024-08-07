@@ -27,25 +27,25 @@ resource "aws_iam_role" "role_eks_node" {
 resource "aws_iam_role_policy_attachment" "attachment_eks_worker_node" {
   count      = var.eks.create ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role       = aws_iam_role.role_eks_node.name
+  role       = aws_iam_role.role_eks_node[count.index].name
 }
 
 resource "aws_iam_role_policy_attachment" "attachment_cni_policy" {
   count      = var.eks.create ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = aws_iam_role.role_eks_node.name
+  role       = aws_iam_role.role_eks_node[count.index].name
 }
 
 resource "aws_iam_role_policy_attachment" "attachment_ec2_container_registry" {
   count      = var.eks.create ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = aws_iam_role.role_eks_node.name
+  role       = aws_iam_role.role_eks_node[count.index].name
 }
 
 resource "aws_iam_role_policy_attachment" "attachment_cloudwatch_log" {
   count      = var.eks.create ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
-  role       = aws_iam_role.role_eks_node.name
+  role       = aws_iam_role.role_eks_node[count.index].name
 }
 
 resource "aws_iam_policy" "s3_access_policy" {
@@ -75,8 +75,8 @@ resource "aws_iam_policy" "s3_access_policy" {
 
 resource "aws_iam_role_policy_attachment" "attachment_s3_access" {
   count      = var.eks.create ? 1 : 0
-  policy_arn = aws_iam_policy.s3_access_policy.arn
-  role       = aws_iam_role.role_eks_node.name
+  policy_arn = aws_iam_policy.s3_access_policy[count.index].arn
+  role       = aws_iam_role.role_eks_node[count.index].name
 }
 
 resource "aws_iam_policy" "secrets_manager_read_policy" {
@@ -102,6 +102,6 @@ resource "aws_iam_policy" "secrets_manager_read_policy" {
 
 resource "aws_iam_role_policy_attachment" "attachment_secrets_manager_read" {
   count      = var.eks.create ? 1 : 0
-  policy_arn = aws_iam_policy.secrets_manager_read_policy.arn
-  role       = aws_iam_role.role_eks_node.name
+  policy_arn = aws_iam_policy.secrets_manager_read_policy[count.index].arn
+  role       = aws_iam_role.role_eks_node[count.index].name
 }

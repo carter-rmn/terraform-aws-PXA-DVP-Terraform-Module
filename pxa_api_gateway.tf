@@ -94,8 +94,8 @@ resource "aws_api_gateway_integration" "event_post" {
   uri                     = "arn:aws:apigateway:${var.AWS_REGION}:lambda:path/2015-03-31/functions/${aws_lambda_function.lambdas.arn}/invocations"
 
   request_templates = {
-    "application/json"           = file("templates/request_template_application_json.txt")
-    "application/x-www-form-urlencoded" = file("templates/request_template_application_x_www_form_urlencoded.txt")
+    "application/json"                  = file("${path.module}/templates/request_template_application_json.txt")
+    "application/x-www-form-urlencoded" = file("${path.module}/templates/request_template_application_x_www_form_urlencoded.txt")
   }
 
   passthrough_behavior = "NEVER"  
@@ -221,7 +221,7 @@ resource "aws_api_gateway_integration" "authenticate_integration" {
   http_method             = aws_api_gateway_method.authenticate_method.http_method
   integration_http_method = "POST"
   type                    = "HTTP_PROXY"
-  uri                     = vars.api_gateway.authenticate_uri   
+  uri                     = var.api_gateway.authenticate_uri   
 }
 
 # /api/geolocation
@@ -244,7 +244,7 @@ resource "aws_api_gateway_integration" "geolocation_integration" {
   http_method             = aws_api_gateway_method.geolocation_method.http_method
   integration_http_method = "GET"
   type                    = "HTTP_PROXY"
-  uri                     = vars.api_gateway.geolocation_uri
+  uri                     = var.api_gateway.geolocation_uri
 }
 
 resource "aws_api_gateway_deployment" "deployment" {

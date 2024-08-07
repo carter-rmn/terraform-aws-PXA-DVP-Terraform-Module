@@ -1,8 +1,8 @@
 resource "aws_s3_bucket" "s3_bucket" {
-  bucket = "${local.rmn_prefix}-s3-resources"
+  bucket = "${local.pxa_prefix}-s3-resources"
   tags = {
-    Name        = "${local.rmn_prefix}-s3-resources"
-    Project     = local.rmn_project_name
+    Name        = "${local.pxa_prefix}-s3-resources"
+    Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
@@ -18,9 +18,9 @@ resource "aws_s3_bucket_public_access_block" "s3_bucket" {
 }
 
 resource "aws_iam_user" "s3_user" {
-  name = "${local.rmn_prefix}-s3-user"
+  name = "${local.pxa_prefix}-s3-user"
   tags = {
-    Project     = local.rmn_project_name
+    Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
@@ -32,7 +32,7 @@ resource "aws_iam_access_key" "s3_user_key" {
 }
 
 resource "aws_iam_user_policy" "s3_user_policy" {
-  name = "${local.rmn_prefix}-policy-s3-app-user"
+  name = "${local.pxa_prefix}-policy-s3-app-user"
   user = aws_iam_user.s3_user.name
 
   policy = jsonencode({

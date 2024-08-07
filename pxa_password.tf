@@ -23,11 +23,6 @@ resource "aws_secretsmanager_secret_version" "secret" {
         public   = join(",", var.vpc.subnets.public)
       }
     }
-    msk = {
-      address = substr(element(split(":", element(split(",", aws_msk_cluster.msk.bootstrap_brokers), 0)), 0), 4, -1)
-      port    = element(split(":", element(split(",", aws_msk_cluster.msk.bootstrap_brokers), 0)), 1)
-      url     = substr(element(split(",", aws_msk_cluster.msk.bootstrap_brokers), 0), 4, -1)
-    }
     keyspace = {
       name = aws_keyspaces_keyspace.keyspace.name
     }
