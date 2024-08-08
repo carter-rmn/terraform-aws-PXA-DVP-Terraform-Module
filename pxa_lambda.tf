@@ -3,7 +3,7 @@ resource "aws_lambda_function" "lambdas" {
   handler       = "event_lambda.event"
   runtime       = "python3.11"
   role          = aws_iam_role.lambda_role.arn
-  filename      = "src/event_function.zip"
+  filename      = "${path.module}/src/event_function.zip"
   memory_size   = 128
   timeout       = 7
 
@@ -26,7 +26,7 @@ resource "aws_lambda_function" "lambdas" {
 }
 
 resource "aws_lambda_layer_version" "event_layer" {
-  filename   = "layers/event_lambda_layer.zip"
+  filename   = "${path.module}/layers/event_lambda_layer.zip"
   layer_name = "event-layer"
 
   compatible_runtimes = ["python3.11"]
