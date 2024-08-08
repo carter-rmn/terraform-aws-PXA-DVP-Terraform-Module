@@ -26,7 +26,7 @@ resource "aws_lambda_function" "lambdas" {
 }
 
 resource "aws_lambda_layer_version" "event_layer" {
-  filename   = "layers/lambda_layer.zip"
+  filename   = "layers/event_lambda_layer.zip"
   layer_name = "event-layer"
 
   compatible_runtimes = ["python3.11"]
