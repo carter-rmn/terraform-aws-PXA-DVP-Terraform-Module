@@ -1,6 +1,6 @@
 resource "aws_eks_cluster" "eks" {
   count                     = var.eks.create ? 1 : 0
-  name                      = "${local.pxa_prefix}-eks"
+  name                      = "${local.pxa_prefix}-eks-cluster"
   enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
   role_arn                  = aws_iam_role.role_eks[count.index].arn
   version                   = "1.29"
