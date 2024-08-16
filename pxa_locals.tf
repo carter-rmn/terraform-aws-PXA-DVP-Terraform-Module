@@ -10,7 +10,7 @@ locals {
     }
   }
 
-  keys = { for item in distinct([for item, _ in local.pxa_config.ec2.instances : element(split("-", item), 0)]) : item => {} }
+  keys = { for item in distinct([for item, _ in local.ec2.instances : element(split("-", item), 0)]) : item => {} }
 
   ecr = {
     names = [
