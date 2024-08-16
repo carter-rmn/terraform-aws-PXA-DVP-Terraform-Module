@@ -9,6 +9,9 @@ locals {
       "mongo" : aws_security_group.sg_mongo.id
     }
   }
+
+  keys = { for item in distinct([for item, _ in local.pxa_config.ec2.instances : element(split("-", item), 0)]) : item => {} }
+
   ecr = {
     names = [
       "carter-analytics-api",

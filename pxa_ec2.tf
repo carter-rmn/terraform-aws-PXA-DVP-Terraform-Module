@@ -14,6 +14,8 @@ resource "aws_instance" "ec2s" {
 
   associate_public_ip_address = each.value.public
 
+  depends_on = [aws_key_pair.ec2s]
+
   root_block_device {
     volume_size = each.value.volume_size
     tags = {
