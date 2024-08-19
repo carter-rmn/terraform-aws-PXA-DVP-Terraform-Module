@@ -1,5 +1,5 @@
 locals {
-  pxa_project_name = "pxa"
+  pxa_project_name = "${var.PROJECT_PRENAME}pxa"
   pxa_prefix       = "${local.pxa_project_name}-${var.PROJECT_CUSTOMER}-${var.PROJECT_ENV}"
 
   ec2 = {

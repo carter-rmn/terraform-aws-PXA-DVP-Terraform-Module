@@ -4,6 +4,7 @@ variable "AWS_REGION" {}
 # PROJECT
 variable "PROJECT_CUSTOMER" {}
 variable "PROJECT_ENV" {}
+variable "PROJECT_PRENAME" {}
 
 variable "vpc" {
   type = object({
