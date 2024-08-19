@@ -1,5 +1,5 @@
 resource "aws_keyspaces_keyspace" "keyspace" {
-  name = "${var.PROJECT_PRENAME}_${var.PROJECT_CUSTOMER}_${var.PROJECT_ENV}"
+  name = "carter_analytics_${var.PROJECT_ENV}"
 
   tags = {
     Name        = "${var.PROJECT_PRENAME}_${var.PROJECT_CUSTOMER}_${var.PROJECT_ENV}"
