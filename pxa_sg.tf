@@ -175,7 +175,34 @@ resource "aws_security_group" "sg_mongo" {
   }
 }
 
+resource "aws_security_group" "ansible" {
+  name        = "${local.pxa_prefix}-sg-ansible"
+  description = "Allow Ansible Operation"
 
+  vpc_id = var.vpc.id
+
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "tcp"
+    cidr_blocks = concat(var.vpc.cidr_blocks.private, var.vpc.cidr_blocks.database, var.vpc.cidr_blocks.public)
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name        = "${local.pxa_prefix}-sg-ansible"
+    Project     = local.pxa_project_name
+    Customer    = var.PROJECT_CUSTOMER
+    Environment = var.PROJECT_ENV
+    Terraform   = true
+  }
+}
 
 
 
