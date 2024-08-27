@@ -45,3 +45,9 @@ resource "aws_secretsmanager_secret" "pxa_secret_ec2s" {
     Terraform   = true
   }
 }
+
+resource "aws_secretsmanager_secret_version" "pxa_secret_ec2s" {
+  for_each      = local.keys
+  secret_id     = aws_secretsmanager_secret.pxa_secret_ec2s[each.key].id
+  secret_string = tls_private_key.ec2s[each.key].private_key_pem
+}
