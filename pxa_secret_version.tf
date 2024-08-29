@@ -51,7 +51,7 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
     eks = {
       roles = {
         lb_contorller = {
-          arn = aws_iam_role.role_role_lb_controller.arn
+          arn = var.eks.create ? aws_iam_role.role_role_lb_controller[0].arn : null
         }
       }
     }
