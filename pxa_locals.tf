@@ -25,4 +25,18 @@ locals {
   eks_oidc_url = var.eks.create ? aws_eks_cluster.eks[0].identity[0].oidc[0].issuer : ""
   eks_oidc_arn = var.eks.create ? aws_iam_openid_connect_provider.eks[0].arn : ""
 
+  databases = {
+    mongo = {
+      port = 27017
+      pxa = {
+        name = "carter-analytics"
+        usernames = {
+          root   = "root"
+          admin  = "admin"
+          app    = "carter_analytics"
+          viewer = "viewer"
+        }
+      }
+    }
+  }
 }
