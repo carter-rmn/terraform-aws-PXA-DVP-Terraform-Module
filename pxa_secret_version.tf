@@ -52,6 +52,9 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
         }
       }
     }
+    ecr = {
+      domain = element(split("/", aws_ecr_repository.ecrs["carter-analytics-api"].repository_url), 0)
+    }
   })
 }
 
