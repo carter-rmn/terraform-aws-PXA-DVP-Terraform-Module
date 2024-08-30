@@ -1,8 +1,8 @@
 resource "aws_keyspaces_keyspace" "keyspace" {
-  name = "carter_analytics_${var.PROJECT_ENV}"
+  name = "${var.PROJECT_KEYSPACE_NAME}"
 
   tags = {
-    Name        = "${var.PROJECT_PRENAME}_${var.PROJECT_CUSTOMER}_${var.PROJECT_ENV}"
+    Name        = "${var.PROJECT_KEYSPACE_NAME}"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
