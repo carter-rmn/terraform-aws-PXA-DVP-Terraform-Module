@@ -1,8 +1,8 @@
-resource "aws_keyspaces_keyspace" "keyspace" {
-  name = "${var.PROJECT_KEYSPACE_NAME}"
+resource "aws_keyspaces_keyspace" "carter_analytics" {
+  name = "${local.pxa_prefix}-keyspace-carter-analytics"
 
   tags = {
-    Name        = "${var.PROJECT_KEYSPACE_NAME}"
+    Name        = "${local.pxa_prefix}-keyspace-carter-analytics"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
@@ -11,7 +11,7 @@ resource "aws_keyspaces_keyspace" "keyspace" {
 }
 
 resource "aws_keyspaces_table" "carter_analytics_events" {
-  keyspace_name = aws_keyspaces_keyspace.keyspace.name
+  keyspace_name = aws_keyspaces_keyspace.carter_analytics.name
   table_name    = "carter_analytics_events"
 
   schema_definition {
@@ -85,7 +85,7 @@ resource "aws_keyspaces_table" "carter_analytics_events" {
   }
 
   tags = {
-    Name        = "${local.pxa_project_name}_${var.PROJECT_ENV}_carter_analytics_events"
+    Name        = "${local.pxa_prefix}-keyspace-table-carter-analytics-events"
     Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
