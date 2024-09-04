@@ -1,5 +1,5 @@
 resource "aws_keyspaces_keyspace" "carter_analytics" {
-  name = "${local.pxa_prefix}-keyspace-carter-analytics"
+  name = replace("${local.pxa_prefix}-keyspace-carter-analytics", "-", "_")
 
   tags = {
     Name        = "${local.pxa_prefix}-keyspace-carter-analytics"
