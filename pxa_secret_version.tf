@@ -13,7 +13,7 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
       }
     }
     keyspace = {
-      name = aws_keyspaces_keyspace.keyspace.name
+      name = aws_keyspaces_keyspace.carter_analytics.name
     }
     s3_user = {
       access_key = aws_iam_access_key.s3_user_key.id
