@@ -94,7 +94,7 @@ resource "aws_iam_policy" "secrets_manager_read_policy" {
           "secretsmanager:DescribeSecret",
           "secretsmanager:ListSecrets"
         ],
-        Resource = "arn:aws:secretsmanager:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:secret:${local.pxa_prefix}-${var.PROJECT_ENV}-*"
+        Resource = "arn:aws:secretsmanager:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:secret:${local.pxa_prefix}-*"
       }
     ]
   })
