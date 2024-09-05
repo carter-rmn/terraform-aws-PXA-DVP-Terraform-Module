@@ -126,7 +126,7 @@ resource "aws_iam_policy" "keyspaces_access_policy" {
           "cassandra:Execute"
         ],
         Resource = [
-          "arn:aws:cassandra:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:/keyspace/${aws_keyspaces_keyspace.carter_analytics.name}",
+          "arn:aws:cassandra:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:/keyspace/system",
           "arn:aws:cassandra:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:/keyspace/${aws_keyspaces_keyspace.carter_analytics.name}/table/*"
         ]
       }
