@@ -94,7 +94,7 @@ resource "aws_iam_policy" "secrets_manager_read_policy" {
           "secretsmanager:DescribeSecret",
           "secretsmanager:ListSecrets"
         ],
-        Resource = "arn:aws:secretsmanager:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:secret:${local.pxa_project_name}-${var.PROJECT_ENV}*"
+        Resource = "arn:aws:secretsmanager:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:secret:${local.pxa_prefix}-${var.PROJECT_ENV}-*"
       }
     ]
   })
@@ -103,5 +103,39 @@ resource "aws_iam_policy" "secrets_manager_read_policy" {
 resource "aws_iam_role_policy_attachment" "attachment_secrets_manager_read" {
   count      = var.eks.create ? 1 : 0
   policy_arn = aws_iam_policy.secrets_manager_read_policy[count.index].arn
+  role       = aws_iam_role.role_eks_node[count.index].name
+}
+
+resource "aws_iam_policy" "keyspaces_access_policy" {
+  count       = var.eks.create ? 1 : 0
+  name        = "${local.pxa_prefix}-keyspaces-access-policy"
+  description = "Policy to allow access to the Keyspaces for the project"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "cassandra:Select",
+          "cassandra:Modify",
+          "cassandra:Create",
+          "cassandra:Alter",
+          "cassandra:Drop",
+          "cassandra:Describe",
+          "cassandra:Execute"
+        ],
+        Resource = [
+          "arn:aws:cassandra:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:/keyspace/${aws_keyspaces_keyspace.carter_analytics.name}",
+          "arn:aws:cassandra:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:/keyspace/${aws_keyspaces_keyspace.carter_analytics.name}/table/*"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "attachment_keyspaces_access" {
+  count      = var.eks.create ? 1 : 0
+  policy_arn = aws_iam_policy.keyspaces_access_policy[count.index].arn
   role       = aws_iam_role.role_eks_node[count.index].name
 }
