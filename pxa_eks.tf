@@ -41,6 +41,22 @@ resource "aws_eks_node_group" "eks_node_group" {
     Environment = var.PROJECT_ENV
     Terraform   = "true"
   }
+
+instance_tags = {
+    Name        = "${local.pxa_prefix}-eks-node"
+    Project     = "${local.pxa_project_name}"
+    Customer    = var.PROJECT_CUSTOMER
+    Environment = var.PROJECT_ENV
+    Terraform   = "true"
+  }
+
+  labels = {
+    Environment = var.PROJECT_ENV
+  }
+
+  lifecycle {
+    ignore_changes = [scaling_config[0].desired_size]
+  }
 }
 
 data "tls_certificate" "eks" {
