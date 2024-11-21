@@ -36,7 +36,7 @@ resource "aws_launch_template" "eks_node_group" {
   tag_specifications {
     resource_type = "instance"
     tags = {
-      Name        = "${local.pxa_prefix}-eks-node}"
+      Name        = "${local.pxa_prefix}-eks-node"
       Project     = "${local.pxa_project_name}"
       Customer    = var.PROJECT_CUSTOMER
       Environment = var.PROJECT_ENV
