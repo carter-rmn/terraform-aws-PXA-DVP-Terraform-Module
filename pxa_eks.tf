@@ -105,7 +105,7 @@ resource "aws_eks_addon" "vpc_cni" {
   count                    = var.eks.create ? 1 : 0
   cluster_name             = aws_eks_cluster.eks[count.index].name
   addon_name               = "vpc-cni"
-  addon_version            = "1.29"
+  addon_version            = "v1.18.6-eksbuild.1"
   service_account_role_arn = aws_iam_role.vpc_cni[count.index].arn
 
   configuration_values = jsonencode({
