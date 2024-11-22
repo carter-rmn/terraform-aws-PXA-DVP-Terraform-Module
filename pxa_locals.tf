@@ -39,4 +39,12 @@ locals {
       }
     }
   }
+
+  eks_auth_users = var.eks.create ? <<-EOF
+    - groups:
+      - system:masters
+      userarn: ${var.eks_admin_user_arn}
+      username: ${var.eks_admin_user_name}
+    EOF
+  : ""
 }

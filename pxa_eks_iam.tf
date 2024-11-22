@@ -123,3 +123,43 @@ resource "aws_iam_role_policy" "vpc_cni_custom" {
     ]
   })
 }
+
+# IAM Role for EBS CSI Driver
+resource "aws_iam_role" "ebs_csi_driver" {
+  count = var.eks.create ? 1 : 0
+  name  = "${local.pxa_prefix}-ebs-csi-driver-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Effect = "Allow"
+        Principal = {
+          Federated = aws_iam_openid_connect_provider.eks[count.index].arn
+        }
+        Condition = {
+          StringEquals = {
+            "${replace(aws_eks_cluster.eks[count.index].identity[0].oidc[0].issuer, "https://", "")}:sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa",
+            "${replace(aws_eks_cluster.eks[count.index].identity[0].oidc[0].issuer, "https://", "")}:aud": "sts.amazonaws.com"
+          }
+        }
+      }
+    ]
+  })
+
+  tags = {
+    Name        = "${local.pxa_prefix}-ebs-csi-driver-role"
+    Project     = local.pxa_project_name
+    Customer    = var.PROJECT_CUSTOMER
+    Environment = var.PROJECT_ENV
+    Terraform   = true
+  }
+}
+
+# Attach AWS-managed EBS CSI Driver Policy
+resource "aws_iam_role_policy_attachment" "ebs_csi_driver" {
+  count      = var.eks.create ? 1 : 0
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+  role       = aws_iam_role.ebs_csi_driver[count.index].name
+}
