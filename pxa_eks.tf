@@ -160,3 +160,38 @@ resource "aws_eks_addon" "ebs_csi_driver" {
     Terraform   = true
   }
 }
+
+# Get existing aws-auth ConfigMap
+data "kubernetes_config_map" "aws_auth" {
+  count = var.eks.create ? 1 : 0
+  metadata {
+    name      = "aws-auth"
+    namespace = "kube-system"
+  }
+}
+
+# Update aws-auth ConfigMap
+resource "kubernetes_config_map_v1_data" "aws_auth" {
+  count = var.eks.create ? 1 : 0
+  force = true
+  
+  metadata {
+    name      = "aws-auth"
+    namespace = "kube-system"
+  }
+
+  data = {
+    mapRoles = lookup(data.kubernetes_config_map.aws_auth[0].data, "mapRoles", "")
+    mapUsers = replace(yamlencode(distinct(concat(
+      yamldecode(lookup(data.kubernetes_config_map.aws_auth[0].data, "mapUsers", "[]")),
+      yamldecode(local.eks_auth_users)
+    ))), "\"", "")
+  }
+
+  lifecycle {
+    ignore_changes = []
+    prevent_destroy = true
+  }
+
+  depends_on = [aws_eks_cluster.eks]
+}
