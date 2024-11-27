@@ -160,7 +160,7 @@ data "aws_eks_cluster_auth" "eks" {
 }
 
 provider "kubernetes" {
-  count                  = var.eks.create ? 1 : 0
+  enable                 = var.eks.create ? true : false
   host                   = aws_eks_cluster.eks[0].endpoint
   cluster_ca_certificate = base64decode(aws_eks_cluster.eks[0].certificate_authority[0].data)
   token                  = data.aws_eks_cluster_auth.eks[0].token
