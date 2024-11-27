@@ -12,6 +12,11 @@ resource "aws_iam_access_key" "app_user_key" {
   user = aws_iam_user.app_user.name
 }
 
+resource "aws_iam_service_specific_credential" "keyspaces_app_user_credential" {
+  user_name    = aws_iam_user.app_user.name
+  service_name = "cassandra.amazonaws.com"
+}
+
 resource "aws_iam_user_policy" "app_user_policy" {
   name = "${local.pxa_prefix}-policy-app-user"
   user = aws_iam_user.app_user.name

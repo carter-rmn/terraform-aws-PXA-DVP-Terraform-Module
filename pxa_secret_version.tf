@@ -18,6 +18,11 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
     app_user = {
       access_key = aws_iam_access_key.app_user_key.id
       secret_key = aws_iam_access_key.app_user_key.secret
+      keyspaces = {
+        service_specific_credential_id = aws_iam_service_specific_credential.keyspaces_app_user_credential.service_specific_credential_id
+        service_specific_credential    = aws_iam_service_specific_credential.keyspaces_app_user_credential.service_password
+        username                       = aws_iam_service_specific_credential.keyspaces_app_user_credential.service_user_name
+      }
     }
     mongo = {
       pxa = {
