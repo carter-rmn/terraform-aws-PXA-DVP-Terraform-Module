@@ -160,10 +160,9 @@ data "aws_eks_cluster_auth" "eks" {
 }
 
 provider "kubernetes" {
-  enable                 = var.eks.create ? true : false
-  host                   = aws_eks_cluster.eks[0].endpoint
-  cluster_ca_certificate = base64decode(aws_eks_cluster.eks[0].certificate_authority[0].data)
-  token                  = data.aws_eks_cluster_auth.eks[0].token
+  host                   = local.kubernetes_config != null ? local.kubernetes_config.host : null
+  cluster_ca_certificate = local.kubernetes_config != null ? local.kubernetes_config.cluster_ca_certificate : null
+  token                  = local.kubernetes_config != null ? local.kubernetes_config.token : null
 }
 
 # Get existing aws-auth ConfigMap
