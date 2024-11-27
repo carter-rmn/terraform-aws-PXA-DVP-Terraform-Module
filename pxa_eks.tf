@@ -151,3 +151,5 @@ resource "aws_eks_addon" "ebs_csi_driver" {
     Environment = var.PROJECT_ENV
     Terraform   = true
   }
+  
+}
