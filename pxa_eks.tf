@@ -161,6 +161,17 @@ resource "aws_eks_addon" "ebs_csi_driver" {
   }
 }
 
+data "aws_eks_cluster_auth" "eks" {
+  count        = var.eks.create ? 1 : 0
+  name         = aws_eks_cluster.eks[count.index].name
+}
+
+provider "kubernetes" {
+  host                   = aws_eks_cluster.eks[count.index].endpoint
+  cluster_ca_certificate = base64decode(aws_eks_cluster.eks[count.index].certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.eks[count.index].token
+}
+
 # Get existing aws-auth ConfigMap
 data "kubernetes_config_map" "aws_auth" {
   count = var.eks.create ? 1 : 0
