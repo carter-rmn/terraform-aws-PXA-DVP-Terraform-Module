@@ -5,8 +5,6 @@ variable "AWS_REGION" {}
 variable "PROJECT_CUSTOMER" {}
 variable "PROJECT_ENV" {}
 variable "PROJECT_PRENAME" {}
-variable "eks_admin_user_name" {}
-variable "eks_admin_user_arn" {}
 
 variable "vpc" {
   type = object({
