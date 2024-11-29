@@ -11,5 +11,5 @@ output "cluster_name" {
 }
 
 output "eks" {
-  value = var.eks.create ? aws_eks_cluster.eks[0]
+  value = var.eks.create ? aws_eks_cluster.eks[0] : null
 }
