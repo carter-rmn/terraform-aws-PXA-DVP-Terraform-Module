@@ -39,4 +39,18 @@ locals {
       }
     }
   }
+
+  eks_auth_users = var.eks.create ? join("\n", [
+    "- groups:",
+    "  - system:masters",
+    "  userarn: ${var.eks_admin_user_arn}",
+    "  username: ${var.eks_admin_user_name}"
+  ]) : ""
+
+  kubernetes_config = var.eks.create ? {
+    host                   = aws_eks_cluster.eks[0].endpoint
+    cluster_ca_certificate = base64decode(aws_eks_cluster.eks[0].certificate_authority[0].data)
+    token                  = data.aws_eks_cluster_auth.eks[0].token
+  } : null
+
 }
