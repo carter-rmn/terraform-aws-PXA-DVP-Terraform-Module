@@ -9,3 +9,7 @@ output "cluster_certificate_authority_data" {
 output "cluster_name" {
   value = var.eks.create ? aws_eks_cluster.eks[0].name : null
 }
+
+output "eks" {
+  value = var.eks.create ? aws_eks_cluster.eks[0]
+}
