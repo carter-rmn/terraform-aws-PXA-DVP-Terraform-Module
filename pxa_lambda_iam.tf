@@ -26,13 +26,13 @@ EOF
   }
 }
 
-resource "aws_iam_policy_attachment" "lambda_basic_execution" {
+resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
   name       = "${local.pxa_prefix}-lambda-basic-execution"
   roles      = [aws_iam_role.lambda_role.name]
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-resource "aws_iam_policy_attachment" "lambda_vpc_access_execution" {
+resource "aws_iam_role_policy_attachment" "lambda_vpc_access_execution" {
   name       = "${local.pxa_prefix}-lambda-vpc-access-execution"
   roles      = [aws_iam_role.lambda_role.name]
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
@@ -58,7 +58,7 @@ resource "aws_iam_policy" "lambda_secrets_manager_policy" {
   })
 }
 
-resource "aws_iam_policy_attachment" "lambda_secrets_manager_attachment" {
+resource "aws_iam_role_policy_attachment" "lambda_secrets_manager_attachment" {
   name       = "${local.pxa_prefix}-lambda-secrets-manager-attachment"
   roles      = [aws_iam_role.lambda_role.name]
   policy_arn = aws_iam_policy.lambda_secrets_manager_policy.arn
