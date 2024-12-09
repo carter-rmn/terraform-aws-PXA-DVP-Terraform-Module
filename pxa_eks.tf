@@ -78,3 +78,4 @@ moved {
 moved {
   from = data.kubernetes_config_map.aws_auth
   to   = null
+}
