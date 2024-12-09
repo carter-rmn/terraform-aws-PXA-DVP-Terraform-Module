@@ -24,25 +24,20 @@ data "tls_certificate" "eks" {
   url   = local.eks_oidc_url
 }
 
-data "tls_certificate" "eks" {
-  count = var.eks.create ? 1 : 0
-  url   = local.eks_oidc_url
-}
-
 data "aws_eks_cluster_auth" "eks" {
-  count        = var.eks.create ? 1 : 0
+  count        = 0
   name         = aws_eks_cluster.eks[count.index].name
 }
 
 provider "kubernetes" {
-  host                   = null
-  cluster_ca_certificate = null
-  token                  = null
+  host                   = local.kubernetes_config != null ? local.kubernetes_config.host : null
+  cluster_ca_certificate = local.kubernetes_config != null ? local.kubernetes_config.cluster_ca_certificate : null
+  token                  = local.kubernetes_config != null ? local.kubernetes_config.token : null
 }
 
 # Get existing aws-auth ConfigMap
 data "kubernetes_config_map" "aws_auth" {
-  count = var.eks.create ? 1 : 0
+  count = 0
   metadata {
     name      = "aws-auth"
     namespace = "kube-system"
@@ -51,7 +46,7 @@ data "kubernetes_config_map" "aws_auth" {
 
 # Update aws-auth ConfigMap
 resource "kubernetes_config_map_v1_data" "aws_auth" {
-  count = var.eks.create ? 1 : 0
+  count = 0
   force = true
   
   metadata {
@@ -68,14 +63,4 @@ resource "kubernetes_config_map_v1_data" "aws_auth" {
   }
 
   depends_on = [aws_eks_cluster.eks]
-}
-
-moved {
-  from = kubernetes_config_map_v1_data.aws_auth
-  to   = null
-}
-
-moved {
-  from = data.kubernetes_config_map.aws_auth
-  to   = null
 }
