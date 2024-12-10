@@ -24,8 +24,13 @@ data "tls_certificate" "eks" {
   url   = local.eks_oidc_url
 }
 
+data "aws_eks_cluster_auth" "eks" {
+  count        = var.eks.create ? 1 : 0
+  name         = aws_eks_cluster.eks[count.index].name
+}
+
 provider "kubernetes" {
-  host                   = local.kubernetes_config.host 
-  cluster_ca_certificate = local.kubernetes_config.cluster_ca_certificate 
-  token                  = local.kubernetes_config.token 
+  host                   = aws_eks_cluster.eks[0].endpoint
+  cluster_ca_certificate = base64decode(aws_eks_cluster.eks[0].certificate_authority[0].data)
+  token                  =  data.aws_eks_cluster_auth.eks[0].token
 }
