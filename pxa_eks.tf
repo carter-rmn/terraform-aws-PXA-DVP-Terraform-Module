@@ -25,7 +25,6 @@ data "tls_certificate" "eks" {
 }
 
 data "aws_eks_cluster_auth" "eks" {
-  count        = 0
   name         = aws_eks_cluster.eks[count.index].name
 }
 
@@ -37,7 +36,6 @@ provider "kubernetes" {
 
 # Get existing aws-auth ConfigMap
 data "kubernetes_config_map" "aws_auth" {
-  count = 0
   metadata {
     name      = "aws-auth"
     namespace = "kube-system"
@@ -46,7 +44,6 @@ data "kubernetes_config_map" "aws_auth" {
 
 # Update aws-auth ConfigMap
 resource "kubernetes_config_map_v1_data" "aws_auth" {
-  count = 0
   force = true
   
   metadata {
