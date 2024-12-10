@@ -51,6 +51,8 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
       }
     }
     eks = {
+      name        = "${local.pxa_prefix}-eks-cluster"
+      eks_created = var.eks.create
       roles = {
         lb_contorller = {
           arn = var.eks.create ? aws_iam_role.role_role_lb_controller[0].arn : null

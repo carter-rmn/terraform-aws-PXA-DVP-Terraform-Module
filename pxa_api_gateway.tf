@@ -259,5 +259,18 @@ resource "aws_api_gateway_deployment" "deployment" {
     aws_api_gateway_integration_response.event_post_500
   ]
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  stage_name  = "dev"
+}
+
+resource "aws_api_gateway_stage" "dev_stage" {
+  rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
+  deployment_id = aws_api_gateway_deployment.deployment.id
+  stage_name    = "dev"
+
+  tags = {
+    Name        = "${local.pxa_prefix}-event-api-dev"
+    Project     = "${local.pxa_project_name}"
+    Customer    = var.PROJECT_CUSTOMER
+    Environment = var.PROJECT_ENV
+    Terraform   = true
+  }
 }
