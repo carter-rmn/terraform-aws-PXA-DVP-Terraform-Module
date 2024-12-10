@@ -23,3 +23,9 @@ data "tls_certificate" "eks" {
   count = var.eks.create ? 1 : 0
   url   = local.eks_oidc_url
 }
+
+provider "kubernetes" {
+  host                   = local.kubernetes_config.host 
+  cluster_ca_certificate = local.kubernetes_config.cluster_ca_certificate 
+  token                  = local.kubernetes_config.token 
+}
