@@ -1,0 +1,50 @@
+{
+    "ec2": {
+        "ami": "ami-0083d3f8b2a6c7a81",
+        "allow_ssh": false,
+        "instances": {
+            "ansible": {
+                "instance_type": "t2.micro",
+                "subnet_index": 0,
+                "volume_size": 32,
+                "backup": false,
+                "public": true
+            },
+            "bastion": {
+                "instance_type": "t2.micro",
+                "subnet_index": 0,
+                "volume_size": 64,
+                "backup": false,
+                "public": true
+            },
+            "cicd": {
+                "instance_type": "c5.xlarge",
+                "subnet_index": 0,
+                "volume_size": 64,
+                "backup": false,
+                "public": true
+            },
+            "mongo-pxa-1": {
+                "instance_type": "t2.medium",
+                "subnet_index": 0,
+                "volume_size": 128,
+                "backup": false,
+                "public": true
+            },
+            "mongo-pxa-2": {
+                "instance_type": "t2.medium",
+                "subnet_index": 0,
+                "volume_size": 128,
+                "backup": false,
+                "public": true
+            },
+            "mongo-pxa-3": {
+                "instance_type": "t2.medium",
+                "subnet_index": 0,
+                "volume_size": 128,
+                "backup": false,
+                "public": true
+            }
+        }
+    }
+}

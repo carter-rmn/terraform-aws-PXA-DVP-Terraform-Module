@@ -1,4 +1,4 @@
-resource "aws_iam_role" "lambda_role" {
+resource "aws_iam_role" "lambda" {
   name = "${local.pxa_prefix}-lambda-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -31,12 +31,12 @@ data "aws_iam_policy" "lambda_vpc_access_execution" {
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
-  role       = aws_iam_role.lambda_role.name
+  role       = aws_iam_role.lambda.name
   policy_arn = data.aws_iam_policy.lambda_basic_execution.arn
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_vpc_access_execution" {
-  role       = aws_iam_role.lambda_role.name
+  role       = aws_iam_role.lambda.name
   policy_arn = data.aws_iam_policy.lambda_vpc_access_execution.arn
 }
 
@@ -61,6 +61,6 @@ resource "aws_iam_policy" "lambda_secrets_manager_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_secrets_manager_attachment" {
-  role       = aws_iam_role.lambda_role.name
+  role       = aws_iam_role.lambda.name
   policy_arn = aws_iam_policy.lambda_secrets_manager_policy.arn
 }

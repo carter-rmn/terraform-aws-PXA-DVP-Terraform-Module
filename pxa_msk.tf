@@ -1,6 +1,6 @@
-resource "aws_msk_cluster" "msk" {
+resource "aws_msk_cluster" "main" {
   count                  = var.msk.create ? 1 : 0
-  cluster_name           = "${local.pxa_prefix}-msk"
+  cluster_name           = "${local.pxa_prefix}-msk-main"
   kafka_version          = "3.6.0"
   number_of_broker_nodes = var.msk.number_of_broker_nodes  
 
@@ -12,19 +12,19 @@ resource "aws_msk_cluster" "msk" {
         volume_size = var.msk.volume_size
       }
     }
-    security_groups = [aws_security_group.sg_allow_msk[count.index].id]
+    security_groups = [aws_security_group.allow_msk[count.index].id]
   }
   logging_info {
     broker_logs {
       cloudwatch_logs {
         enabled   = true
-        log_group = aws_cloudwatch_log_group.lg_msk[count.index].name
+        log_group = aws_cloudwatch_log_group.main[count.index].name
       }
     }
   }
   configuration_info {
-    arn      = aws_msk_configuration.msk_config[count.index].arn
-    revision = aws_msk_configuration.msk_config[count.index].latest_revision
+    arn      = aws_msk_configuration.main[count.index].arn
+    revision = aws_msk_configuration.main[count.index].latest_revision
   }
   encryption_info {
     encryption_in_transit {
@@ -36,7 +36,7 @@ resource "aws_msk_cluster" "msk" {
   }
 
   tags = {
-    Name        = "${local.pxa_prefix}-msk"
+    Name        = "${local.pxa_prefix}-msk-main"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
@@ -44,12 +44,12 @@ resource "aws_msk_cluster" "msk" {
   }
 }
 
-resource "aws_cloudwatch_log_group" "lg_msk" {
+resource "aws_cloudwatch_log_group" "main" {
   count  = var.msk.create ? 1 : 0
   name   = "/aws/msk/${local.pxa_prefix}"
 
   tags = {
-    Name        = "${local.pxa_prefix}-lg-msk"
+    Name        = "${local.pxa_prefix}-lg-msk-main"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
@@ -57,10 +57,10 @@ resource "aws_cloudwatch_log_group" "lg_msk" {
   }
 }
 
-resource "aws_msk_configuration" "msk_config" {
+resource "aws_msk_configuration" "main" {
   count          = var.msk.create ? 1 : 0
   kafka_versions = ["3.4.0"]
-  name           = "${local.pxa_prefix}-msk-config"
+  name           = "${local.pxa_prefix}-msk-config-main"
 
   server_properties = <<PROPERTIES
 auto.create.topics.enable = true

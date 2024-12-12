@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
-  secret_id = aws_secretsmanager_secret.pxa_secret_terraform.id
+  secret_id = aws_secretsmanager_secret.terraform.id
   secret_string = jsonencode({
     aws = {
       region = var.AWS_REGION
@@ -16,8 +16,8 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
       name = aws_keyspaces_keyspace.carter_analytics.name
     }
     app_user = {
-      access_key = aws_iam_access_key.app_user_key.id
-      secret_key = aws_iam_access_key.app_user_key.secret
+      access_key = aws_iam_access_key.app_user.id
+      secret_key = aws_iam_access_key.app_user.secret
       keyspaces = {
         service_specific_credential_id = aws_iam_service_specific_credential.keyspaces_app_user_credential.service_specific_credential_id
         service_specific_credential    = aws_iam_service_specific_credential.keyspaces_app_user_credential.service_password
@@ -55,7 +55,7 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
       eks_created = var.eks.create
       roles = {
         lb_contorller = {
-          arn = var.eks.create ? aws_iam_role.role_role_lb_controller[0].arn : null
+          arn = var.eks.create ? aws_iam_role.lb_controller[0].arn : null
         }
       }
     }
@@ -64,6 +64,6 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
 
 resource "aws_secretsmanager_secret_version" "pxa_secret_ec2s" {
   for_each      = local.keys
-  secret_id     = aws_secretsmanager_secret.pxa_secret_ec2s[each.key].id
+  secret_id     = aws_secretsmanager_secret.ec2s[each.key].id
   secret_string = tls_private_key.ec2s[each.key].private_key_pem
 }

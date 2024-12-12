@@ -1,4 +1,4 @@
-resource "aws_secretsmanager_secret" "pxa_secret_terraform" {
+resource "aws_secretsmanager_secret" "terraform" {
   name = "${local.pxa_prefix}-secret-terraform"
   tags = {
     Name        = "${local.pxa_prefix}-secret-terraform"
@@ -22,7 +22,7 @@ resource "aws_secretsmanager_secret" "pxa_secret_ec2s" {
   }
 }
 
-resource "aws_secretsmanager_secret" "pxa_secret_kafka_connector" {
+resource "aws_secretsmanager_secret" "kafka_connector" {
   name = "${local.pxa_prefix}-secret-kafka-connector"
   tags = {
     Name        = "${local.pxa_prefix}-secret-kafka-connector"
@@ -33,7 +33,7 @@ resource "aws_secretsmanager_secret" "pxa_secret_kafka_connector" {
   }
 }
 
-resource "aws_secretsmanager_secret" "pxa_secret_api" {
+resource "aws_secretsmanager_secret" "api" {
   name = "${local.pxa_prefix}-secret-api"
   tags = {
     Name        = "${local.pxa_prefix}-secret-api"
@@ -44,7 +44,7 @@ resource "aws_secretsmanager_secret" "pxa_secret_api" {
   }
 }
 
-resource "aws_secretsmanager_secret" "pxa_secret_kestra" {
+resource "aws_secretsmanager_secret" "kestra" {
   name = "${local.pxa_prefix}-secret-kestra"
   tags = {
     Name        = "${local.pxa_prefix}-secret-kestra"

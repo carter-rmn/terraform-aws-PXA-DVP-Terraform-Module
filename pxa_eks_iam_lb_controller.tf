@@ -1,4 +1,4 @@
-resource "aws_iam_role" "role_role_lb_controller" {
+resource "aws_iam_role" "lb_controller" {
   count              = var.eks.create ? 1 : 0
   name               = "${local.pxa_prefix}-iam-role-lb-controller"
   assume_role_policy = data.aws_iam_policy_document.aws_load_balancer_controller_assume_role_policy.json
@@ -29,9 +29,9 @@ resource "aws_iam_policy" "policy_lb_controller" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "aws_load_balancer_controller_attach" {
+resource "aws_iam_role_policy_attachment" "lb_controller" {
   count      = var.eks.create ? 1 : 0
-  role       = aws_iam_role.role_role_lb_controller[count.index].name
+  role       = aws_iam_role.lb_controller[count.index].name
   policy_arn = aws_iam_policy.policy_lb_controller[count.index].arn
 }
 

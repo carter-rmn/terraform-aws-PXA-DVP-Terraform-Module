@@ -7,7 +7,7 @@ resource "aws_instance" "ec2s" {
 
   vpc_security_group_ids = compact([
     var.vpc.default_security_group.id,
-    aws_security_group.sg_allow_ssh.id,
+    aws_security_group.allow_ssh.id,
     local.ec2.security_groups[element(split("-", each.key), 0)]
   ])
   subnet_id = element(each.value.public ? (var.vpc.subnets.public) : (var.vpc.subnets.private), each.value.subnet_index)

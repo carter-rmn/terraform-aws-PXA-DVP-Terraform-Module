@@ -1,7 +1,7 @@
 resource "aws_api_gateway_rest_api" "api_gateway" {
-  name = "${local.pxa_prefix}-event-api"
+  name = "${local.pxa_prefix}-api-gateway-event"
   tags = {
-    Name        = "${local.pxa_prefix}-event-api"
+    Name        = "${local.pxa_prefix}-api-gateway-event"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV

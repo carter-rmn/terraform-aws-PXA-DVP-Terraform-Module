@@ -1,5 +1,5 @@
 # MSK
-resource "aws_security_group" "sg_allow_msk" {
+resource "aws_security_group" "allow_msk" {
   count       = var.msk.create ? 1 : 0
   name        = "${local.pxa_prefix}-sg-allow-msk"
   description = "Allow MSK traffic"
@@ -30,7 +30,7 @@ resource "aws_security_group" "sg_allow_msk" {
 }
 
 # EC2
-resource "aws_security_group" "sg_allow_ssh" {
+resource "aws_security_group" "allow_ssh" {
   name        = "${local.pxa_prefix}-sg-allow-ssh"
   description = "Allow SSH traffic"
 
@@ -59,7 +59,7 @@ resource "aws_security_group" "sg_allow_ssh" {
   }
 }
 
-resource "aws_security_group" "sg_bastion" {
+resource "aws_security_group" "bastion" {
   name        = "${local.pxa_prefix}-sg-bastion"
   description = "Allow Bastion Connection"
 
@@ -91,7 +91,7 @@ resource "aws_security_group" "sg_bastion" {
   }
 }
 
-resource "aws_security_group" "sg_lambda" {
+resource "aws_security_group" "lambda" {
   name        = "${local.pxa_prefix}-sg-lambda"
   description = "Allow Lambda Function Access"
 
@@ -120,7 +120,7 @@ resource "aws_security_group" "sg_lambda" {
   }
 }
 
-resource "aws_security_group" "sg_cicd" {
+resource "aws_security_group" "cicd" {
   name        = "${local.pxa_prefix}-sg-cicd"
   description = "Allow CICD Connection"
 
@@ -149,7 +149,7 @@ resource "aws_security_group" "sg_cicd" {
   }
 }
 
-resource "aws_security_group" "sg_mongo" {
+resource "aws_security_group" "mongo" {
   name        = "${local.pxa_prefix}-sg-mongo"
   description = "Allow Mongo Connection"
 
@@ -206,8 +206,3 @@ resource "aws_security_group" "ansible" {
     Terraform   = true
   }
 }
-
-
-
-
-

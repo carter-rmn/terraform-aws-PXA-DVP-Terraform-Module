@@ -45,9 +45,9 @@ resource "aws_launch_template" "eks_node_group" {
 
 resource "aws_eks_node_group" "eks_node_group" {
   count           = var.eks.create ? 1 : 0
-  cluster_name    = aws_eks_cluster.eks[count.index].name
+  cluster_name    = aws_eks_cluster.main[count.index].name
   node_group_name = "${local.pxa_prefix}-eks-node-group"
-  node_role_arn   = aws_iam_role.role_eks_node[count.index].arn
+  node_role_arn   = aws_iam_role.eks_main_node[count.index].arn
   subnet_ids      = var.vpc.subnets.private
 
   scaling_config {

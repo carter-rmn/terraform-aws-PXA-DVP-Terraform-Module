@@ -1,15 +1,15 @@
-resource "aws_lambda_function" "lambdas" {
-  function_name = "${local.pxa_prefix}-event-lambda"
+resource "aws_lambda_function" "event" {
+  function_name = "${local.pxa_prefix}-lambda-event"
   handler       = "event_lambda.event"
   runtime       = "python3.11"
-  role          = aws_iam_role.lambda_role.arn
+  role          = lambda_roleaws_iam_role.lambda.arn
   filename      = "${path.module}/src/event_function.zip"
   memory_size   = 128
   timeout       = 7
 
   vpc_config {
     subnet_ids         = var.vpc.subnets.private
-    security_group_ids = [aws_security_group.sg_lambda.id]
+    security_group_ids = [aws_security_group.lambda.id]
   }
 
   layers = [
@@ -17,7 +17,7 @@ resource "aws_lambda_function" "lambdas" {
   ]
 
   tags = {
-    Name        = "${local.pxa_prefix}-event-lambda"
+    Name        = "${local.pxa_prefix}-lambda-event"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
@@ -35,7 +35,7 @@ resource "aws_lambda_layer_version" "event_layer" {
 resource "aws_lambda_permission" "apigw" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.lambdas.function_name
+  function_name = aws_lambda_function.main.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.api_gateway.execution_arn}/*/*"
 }

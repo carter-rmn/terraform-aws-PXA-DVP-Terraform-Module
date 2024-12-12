@@ -1,5 +1,5 @@
 resource "aws_iam_user" "app_user" {
-  name = "${local.pxa_prefix}-app-user"
+  name = "${local.pxa_prefix}-user-app"
   tags = {
     Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
@@ -8,7 +8,7 @@ resource "aws_iam_user" "app_user" {
   }
 }
 
-resource "aws_iam_access_key" "app_user_key" {
+resource "aws_iam_access_key" "app_user" {
   user = aws_iam_user.app_user.name
 }
 
@@ -17,7 +17,7 @@ resource "aws_iam_service_specific_credential" "keyspaces_app_user_credential" {
   service_name = "cassandra.amazonaws.com"
 }
 
-resource "aws_iam_user_policy" "app_user_policy" {
+resource "aws_iam_user_policy" "app_user" {
   name = "${local.pxa_prefix}-policy-app-user"
   user = aws_iam_user.app_user.name
 

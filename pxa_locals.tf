@@ -4,9 +4,9 @@ locals {
 
   ec2 = {
     security_groups : {
-      "bastion" : aws_security_group.sg_bastion.id
-      "cicd" : aws_security_group.sg_cicd.id
-      "mongo" : aws_security_group.sg_mongo.id
+      "bastion" : aws_security_group.bastion.id
+      "cicd" : aws_security_group.cicd.id
+      "mongo" : aws_security_group.mongo.id
       "ansible" : aws_security_group.ansible.id
     }
   }
@@ -22,7 +22,7 @@ locals {
     "imagetag" : "IMMUTABLE"
   }
 
-  eks_oidc_url = var.eks.create ? aws_eks_cluster.eks[0].identity[0].oidc[0].issuer : ""
+  eks_oidc_url = var.eks.create ? aws_eks_cluster.main[0].identity[0].oidc[0].issuer : ""
   eks_oidc_arn = var.eks.create ? aws_iam_openid_connect_provider.eks[0].arn : ""
 
   databases = {
