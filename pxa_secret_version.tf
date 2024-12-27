@@ -28,10 +28,10 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
       pxa = { # to-do: make mongo and its users dynamic
         name        = local.databases.mongo.pxa.name
         port        = local.databases.mongo.port
-        private_ip  = aws_instance.ec2s["mongo-1"].private_ip
-        private_dns = aws_instance.ec2s["mongo-1"].private_dns
-        public_dns  = aws_instance.ec2s["mongo-1"].public_dns
-        public_ip   = aws_instance.ec2s["mongo-1"].public_ip
+        private_ip  = aws_instance.ec2s["mongo-pxa-1"].private_ip
+        private_dns = aws_instance.ec2s["mongo-pxa-1"].private_dns
+        public_dns  = aws_instance.ec2s["mongo-pxa-1"].public_dns
+        public_ip   = aws_instance.ec2s["mongo-pxa-1"].public_ip
         users = {
           root = {
             username = local.databases.mongo.pxa.usernames.root
