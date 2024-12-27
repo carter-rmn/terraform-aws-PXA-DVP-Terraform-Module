@@ -21,7 +21,7 @@ resource "aws_eks_cluster" "main" {
 
 data "tls_certificate" "eks_main" {
   count = var.eks.create ? 1 : 0
-  url   = local.eks_oidc_url
+  url   = local.eks.oidc.url
 }
 
 # data "aws_eks_cluster_auth" "eks" {
