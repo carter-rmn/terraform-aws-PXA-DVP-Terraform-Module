@@ -54,6 +54,7 @@ variable "eks" {
       }))
     })
     existing = object({
+      name              = string
       lb_contorller_arn = string
       openid_connect = object({
         issuer = string
