@@ -46,5 +46,5 @@ locals {
     }
   }
 
-  msk = { bootstrap_brokers = var.msk.create ? aws_msk_cluster.msk.new.bootstrap_brokers : var.msk.existing.bootstrap_brokers }
+  msk = { bootstrap_brokers = var.msk.create ? aws_msk_cluster.msk.bootstrap_brokers : var.msk.existing.bootstrap_brokers }
 }

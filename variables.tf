@@ -32,8 +32,8 @@ variable "msk" {
   type = object({
     create = bool
     new = object({
-      number_of_broker_nodes = number
       instance_type          = string
+      number_of_broker_nodes = number
       volume_size            = number
     })
     existing = object({
