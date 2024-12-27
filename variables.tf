@@ -47,12 +47,12 @@ variable "eks" {
   type = object({
     create = bool
     new = object({
-      node_group = object({
+      node_groups = list(object({
         desired_size  = number
         max_size      = number
         min_size      = number
         instance_type = string
-      })
+      }))
     })
     existing = object({
       lb_contorller_arn = string
