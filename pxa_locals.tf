@@ -22,8 +22,8 @@ locals {
     "imagetag" : "IMMUTABLE"
   }
 
-  eks_oidc_url = var.eks.create ? aws_eks_cluster.main[0].identity[0].oidc[0].issuer : ""
-  eks_oidc_arn = var.eks.create ? aws_iam_openid_connect_provider.eks[0].arn : ""
+  eks_oidc_url = var.eks.create ? aws_eks_cluster.main[0].identity[0].oidc[0].issuer : var.eks.existing.openid_connect.issuer
+  eks_oidc_arn = var.eks.create ? aws_iam_openid_connect_provider.eks[0].arn : var.eks.existing.openid_connect.arn
 
   databases = {
     mongo = {

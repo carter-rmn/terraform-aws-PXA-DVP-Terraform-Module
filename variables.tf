@@ -30,23 +30,35 @@ variable "vpc" {
 
 variable "msk" {
   type = object({
-    create                 = bool
-    id                     = string
-    number_of_broker_nodes = number
-    instance_type          = string
-    volume_size            = number
+    create = bool
+    new = object({
+      number_of_broker_nodes = number
+      instance_type          = string
+      volume_size            = number
+    })
+    existing = object({
+      id = string
+    })
   })
 }
 
 variable "eks" {
   type = object({
     create = bool
-
-    eks_node_group = object({
-      desired_size  = number
-      max_size      = number
-      min_size      = number
-      instance_type = string
+    new = object({
+      node_group = object({
+        desired_size  = number
+        max_size      = number
+        min_size      = number
+        instance_type = string
+      })
+    })
+    existing = object({
+      lb_contorller_arn = string
+      openid_connect = object({
+        issuer = string
+        arn    = string
+      })
     })
   })
 }

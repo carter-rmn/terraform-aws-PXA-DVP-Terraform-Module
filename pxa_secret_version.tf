@@ -55,9 +55,14 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
       eks_created = var.eks.create
       roles = {
         lb_contorller = {
-          arn = var.eks.create ? aws_iam_role.lb_controller[0].arn : null
+          arn = var.eks.create ? aws_iam_role.lb_controller[0].arn : var.eks.existing.lb_contorller_arn
         }
       }
+    }
+    msk = {
+      address = substr(element(split(":", element(split(",", aws_msk_cluster.msk.bootstrap_brokers), 0)), 0), 4, -1)
+      port    = element(split(":", element(split(",", aws_msk_cluster.msk.bootstrap_brokers), 0)), 1)
+      url     = substr(element(split(",", aws_msk_cluster.msk.bootstrap_brokers), 0), 4, -1)
     }
   })
 }

@@ -10,7 +10,7 @@ resource "aws_launch_template" "eks_node_group" {
     }
   }
 
-  instance_type = var.eks.eks_node_group.instance_type
+  instance_type = var.eks.new.node_group.instance_type
 
   tag_specifications {
     resource_type = "instance"
@@ -51,9 +51,9 @@ resource "aws_eks_node_group" "eks_node_group" {
   subnet_ids      = var.vpc.subnets.private
 
   scaling_config {
-    desired_size = var.eks.eks_node_group.desired_size
-    max_size     = var.eks.eks_node_group.max_size
-    min_size     = var.eks.eks_node_group.min_size
+    desired_size = var.eks.new.node_group.desired_size
+    max_size     = var.eks.new.node_group.max_size
+    min_size     = var.eks.new.node_group.min_size
   }
 
   launch_template {
