@@ -1,6 +1,6 @@
 resource "aws_iam_role" "eks_node_group" {
-  count   = var.eks.create ? 1 : 0
-  name    = "${local.pxa_prefix}-iam-role-eks-node"
+  count = var.eks.create ? 1 : 0
+  name  = "${local.pxa_prefix}-iam-role-eks-node"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -27,25 +27,25 @@ resource "aws_iam_role" "eks_node_group" {
 resource "aws_iam_role_policy_attachment" "eks_worker_node" {
   count      = var.eks.create ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role       = aws_iam_role.eks_main_node_group[count.index].name
+  role       = aws_iam_role.eks_node_group[count.index].name
 }
 
 resource "aws_iam_role_policy_attachment" "cni_policy" {
   count      = var.eks.create ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = aws_iam_role.eks_main_node_group[count.index].name
+  role       = aws_iam_role.eks_node_group[count.index].name
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_container_registry" {
   count      = var.eks.create ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = aws_iam_role.eks_main_node_group[count.index].name
+  role       = aws_iam_role.eks_node_group[count.index].name
 }
 
 resource "aws_iam_role_policy_attachment" "cloudwatch_log" {
   count      = var.eks.create ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
-  role       = aws_iam_role.eks_main_node_group[count.index].name
+  role       = aws_iam_role.eks_node_group[count.index].name
 }
 
 resource "aws_iam_policy" "s3_access" {
@@ -76,7 +76,7 @@ resource "aws_iam_policy" "s3_access" {
 resource "aws_iam_role_policy_attachment" "s3_access" {
   count      = var.eks.create ? 1 : 0
   policy_arn = aws_iam_policy.s3_access[count.index].arn
-  role       = aws_iam_role.eks_main_node_group[count.index].name
+  role       = aws_iam_role.eks_node_group[count.index].name
 }
 
 resource "aws_iam_policy" "secrets_manager_read" {
@@ -103,7 +103,7 @@ resource "aws_iam_policy" "secrets_manager_read" {
 resource "aws_iam_role_policy_attachment" "secrets_manager_read" {
   count      = var.eks.create ? 1 : 0
   policy_arn = aws_iam_policy.secrets_manager_read[count.index].arn
-  role       = aws_iam_role.eks_main_node_group[count.index].name
+  role       = aws_iam_role.eks_node_group[count.index].name
 }
 
 resource "aws_iam_policy" "keyspaces_access" {
@@ -137,5 +137,5 @@ resource "aws_iam_policy" "keyspaces_access" {
 resource "aws_iam_role_policy_attachment" "keyspaces_access" {
   count      = var.eks.create ? 1 : 0
   policy_arn = aws_iam_policy.keyspaces_access[count.index].arn
-  role       = aws_iam_role.eks_main_node_group[count.index].name
+  role       = aws_iam_role.eks_node_group[count.index].name
 }
