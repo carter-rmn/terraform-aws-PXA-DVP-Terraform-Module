@@ -59,6 +59,35 @@ resource "aws_security_group" "allow_ssh" {
   }
 }
 
+resource "aws_security_group" "ansible" {
+  name        = "${local.pxa_prefix}-sg-ansible"
+  description = "Allow Ansible Operation"
+
+  vpc_id = var.vpc.id
+
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "tcp"
+    cidr_blocks = concat(var.vpc.cidr_blocks.private, var.vpc.cidr_blocks.database, var.vpc.cidr_blocks.public)
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name        = "${local.pxa_prefix}-sg-ansible"
+    Project     = local.pxa_project_name
+    Customer    = var.PROJECT_CUSTOMER
+    Environment = var.PROJECT_ENV
+    Terraform   = true
+  }
+}
+
 resource "aws_security_group" "bastion" {
   name        = "${local.pxa_prefix}-sg-bastion"
   description = "Allow Bastion Connection"
@@ -66,9 +95,9 @@ resource "aws_security_group" "bastion" {
   vpc_id = var.vpc.id
 
   ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
+    from_port = 22
+    to_port   = 22
+    protocol  = "tcp"
     cidr_blocks = [
       "35.182.251.28/32",
       "103.189.99.5/32"
@@ -84,35 +113,6 @@ resource "aws_security_group" "bastion" {
 
   tags = {
     Name        = "${local.pxa_prefix}-sg-bastion"
-    Project     = local.pxa_project_name
-    Customer    = var.PROJECT_CUSTOMER
-    Environment = var.PROJECT_ENV
-    Terraform   = true
-  }
-}
-
-resource "aws_security_group" "lambda" {
-  name        = "${local.pxa_prefix}-sg-lambda"
-  description = "Allow Lambda Function Access"
-
-  vpc_id = var.vpc.id
-
-  ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name        = "${local.pxa_prefix}-sg-lambda"
     Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
@@ -149,6 +149,35 @@ resource "aws_security_group" "cicd" {
   }
 }
 
+resource "aws_security_group" "lambda" {
+  name        = "${local.pxa_prefix}-sg-lambda"
+  description = "Allow Lambda Function Access"
+
+  vpc_id = var.vpc.id
+
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name        = "${local.pxa_prefix}-sg-lambda"
+    Project     = local.pxa_project_name
+    Customer    = var.PROJECT_CUSTOMER
+    Environment = var.PROJECT_ENV
+    Terraform   = true
+  }
+}
+
 resource "aws_security_group" "mongo" {
   name        = "${local.pxa_prefix}-sg-mongo"
   description = "Allow Mongo Connection"
@@ -178,17 +207,17 @@ resource "aws_security_group" "mongo" {
   }
 }
 
-resource "aws_security_group" "ansible" {
-  name        = "${local.pxa_prefix}-sg-ansible"
-  description = "Allow Ansible Operation"
+resource "aws_security_group" "openvpn" {
+  name        = "${local.pxa_prefix}-sg-openvpn"
+  description = "Allow Openvpn Connection"
 
   vpc_id = var.vpc.id
 
   ingress {
-    from_port   = 0
-    to_port     = 0
+    from_port   = 1194
+    to_port     = 1194
     protocol    = "tcp"
-    cidr_blocks = concat(var.vpc.cidr_blocks.private, var.vpc.cidr_blocks.database, var.vpc.cidr_blocks.public)
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -199,7 +228,7 @@ resource "aws_security_group" "ansible" {
   }
 
   tags = {
-    Name        = "${local.pxa_prefix}-sg-ansible"
+    Name        = "${local.pxa_prefix}-sg-openvpn"
     Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
