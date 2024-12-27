@@ -13,12 +13,9 @@ locals {
   }
 
   ecr = {
-    names = [
-      "carter-analytics-api",
-      "analytics-dashboard",
-      "kafka-connector"
-    ]
-    "imagetag" : "IMMUTABLE"
+    "carter-analytics-api" : {}
+    "analytics-dashboard" : {}
+    "kafka-connector" : {}
   }
 
   databases = {
@@ -46,5 +43,5 @@ locals {
     }
   }
 
-  msk = { bootstrap_brokers = var.msk.create ? aws_msk_cluster.msk.bootstrap_brokers : var.msk.existing.bootstrap_brokers }
+  msk = { bootstrap_brokers = var.msk.create ? aws_msk_cluster.main.bootstrap_brokers : var.msk.existing.bootstrap_brokers }
 }

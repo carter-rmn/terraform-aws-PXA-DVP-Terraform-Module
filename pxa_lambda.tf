@@ -2,7 +2,7 @@ resource "aws_lambda_function" "event" {
   function_name = "${local.pxa_prefix}-lambda-event"
   handler       = "event_lambda.event"
   runtime       = "python3.11"
-  role          = lambda_roleaws_iam_role.lambda.arn
+  role          = aws_iam_role.lambda.arn
   filename      = "${path.module}/src/event_function.zip"
   memory_size   = 128
   timeout       = 7
@@ -35,7 +35,7 @@ resource "aws_lambda_layer_version" "event_layer" {
 resource "aws_lambda_permission" "apigw" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.main.function_name
+  function_name = aws_lambda_function.event.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.api_gateway.execution_arn}/*/*"
 }

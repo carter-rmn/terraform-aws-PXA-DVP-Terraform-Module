@@ -31,7 +31,7 @@ resource "aws_iam_user_policy" "app_user" {
           "s3:GetBucketLocation"
         ]
         Resource = [
-          aws_s3_bucket.s3_bucket.arn
+          aws_s3_bucket.static.arn
         ]
       },
       {
@@ -42,7 +42,7 @@ resource "aws_iam_user_policy" "app_user" {
           "s3:DeleteObject"
         ]
         Resource = [
-          "${aws_s3_bucket.s3_bucket.arn}/*"
+          "${aws_s3_bucket.static.arn}/*"
         ]
       },
       {

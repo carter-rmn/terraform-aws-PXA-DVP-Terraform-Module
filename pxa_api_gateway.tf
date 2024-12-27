@@ -91,18 +91,18 @@ resource "aws_api_gateway_integration" "event_post" {
   http_method             = aws_api_gateway_method.event_post.http_method
   integration_http_method = "POST"
   type                    = "AWS"
-  uri                     = "arn:aws:apigateway:${var.AWS_REGION}:lambda:path/2015-03-31/functions/${aws_lambda_function.lambdas.arn}/invocations"
+  uri                     = "arn:aws:apigateway:${var.AWS_REGION}:lambda:path/2015-03-31/functions/${aws_lambda_function.event.arn}/invocations"
 
   request_templates = {
     "application/json"                  = file("${path.module}/templates/request_template_application_json.txt")
     "application/x-www-form-urlencoded" = file("${path.module}/templates/request_template_application_x_www_form_urlencoded.txt")
   }
 
-  passthrough_behavior = "NEVER"  
+  passthrough_behavior = "NEVER"
 }
 
 resource "aws_api_gateway_integration_response" "event_post_200" {
-  depends_on = [aws_api_gateway_integration.event_post]
+  depends_on  = [aws_api_gateway_integration.event_post]
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
   resource_id = aws_api_gateway_resource.event.id
   http_method = aws_api_gateway_method.event_post.http_method
@@ -121,11 +121,11 @@ EOF
 }
 
 resource "aws_api_gateway_integration_response" "event_post_400" {
-  depends_on = [aws_api_gateway_integration.event_post]
-  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  resource_id = aws_api_gateway_resource.event.id
-  http_method = aws_api_gateway_method.event_post.http_method
-  status_code = "400"
+  depends_on        = [aws_api_gateway_integration.event_post]
+  rest_api_id       = aws_api_gateway_rest_api.api_gateway.id
+  resource_id       = aws_api_gateway_resource.event.id
+  http_method       = aws_api_gateway_method.event_post.http_method
+  status_code       = "400"
   selection_pattern = ".*.400.*"
 
   response_parameters = {
@@ -141,11 +141,11 @@ EOF
 }
 
 resource "aws_api_gateway_integration_response" "event_post_401" {
-  depends_on = [aws_api_gateway_integration.event_post]
-  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  resource_id = aws_api_gateway_resource.event.id
-  http_method = aws_api_gateway_method.event_post.http_method
-  status_code = "401"
+  depends_on        = [aws_api_gateway_integration.event_post]
+  rest_api_id       = aws_api_gateway_rest_api.api_gateway.id
+  resource_id       = aws_api_gateway_resource.event.id
+  http_method       = aws_api_gateway_method.event_post.http_method
+  status_code       = "401"
   selection_pattern = ".*.401.*"
 
   response_parameters = {
@@ -161,11 +161,11 @@ EOF
 }
 
 resource "aws_api_gateway_integration_response" "event_post_403" {
-  depends_on = [aws_api_gateway_integration.event_post]
-  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  resource_id = aws_api_gateway_resource.event.id
-  http_method = aws_api_gateway_method.event_post.http_method
-  status_code = "403"
+  depends_on        = [aws_api_gateway_integration.event_post]
+  rest_api_id       = aws_api_gateway_rest_api.api_gateway.id
+  resource_id       = aws_api_gateway_resource.event.id
+  http_method       = aws_api_gateway_method.event_post.http_method
+  status_code       = "403"
   selection_pattern = ".*.403.*"
 
   response_parameters = {
@@ -181,11 +181,11 @@ EOF
 }
 
 resource "aws_api_gateway_integration_response" "event_post_500" {
-  depends_on = [aws_api_gateway_integration.event_post]
-  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  resource_id = aws_api_gateway_resource.event.id
-  http_method = aws_api_gateway_method.event_post.http_method
-  status_code = "500"
+  depends_on        = [aws_api_gateway_integration.event_post]
+  rest_api_id       = aws_api_gateway_rest_api.api_gateway.id
+  resource_id       = aws_api_gateway_resource.event.id
+  http_method       = aws_api_gateway_method.event_post.http_method
+  status_code       = "500"
   selection_pattern = ".*.500.*"
 
   response_parameters = {
@@ -221,7 +221,7 @@ resource "aws_api_gateway_integration" "authenticate_integration" {
   http_method             = aws_api_gateway_method.authenticate_method.http_method
   integration_http_method = "POST"
   type                    = "HTTP_PROXY"
-  uri                     = var.api_gateway.authenticate_uri   
+  uri                     = var.api_gateway.authenticate_uri
 }
 
 # /api/geolocation

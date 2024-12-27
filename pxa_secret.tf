@@ -9,7 +9,7 @@ resource "aws_secretsmanager_secret" "terraform" {
   }
 }
 
-resource "aws_secretsmanager_secret" "pxa_secret_ec2s" {
+resource "aws_secretsmanager_secret" "ec2s" {
   for_each = local.keys
   name     = "${local.pxa_prefix}-secret-key-${each.key}"
 
