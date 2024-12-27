@@ -1,6 +1,6 @@
 resource "aws_launch_template" "eks_node_group" {
-  count = var.eks.create ? 1 : 0
-  name  = "${local.pxa_prefix}-eks-node-launch-template"
+  for_each = var.eks.create ? { for key, group in var.eks.new.node_groups : key => group } : {}
+  name     = "${local.pxa_prefix}-eks-node-launch-template"
 
   block_device_mappings {
     device_name = "/dev/xvda"
@@ -10,7 +10,7 @@ resource "aws_launch_template" "eks_node_group" {
     }
   }
 
-  instance_type = var.eks.eks_node_group.instance_type
+  instance_type = each.value.instance_type
 
   tag_specifications {
     resource_type = "instance"
@@ -44,21 +44,21 @@ resource "aws_launch_template" "eks_node_group" {
 }
 
 resource "aws_eks_node_group" "eks_node_group" {
-  count           = var.eks.create ? 1 : 0
-  cluster_name    = aws_eks_cluster.main[count.index].name
+  for_each        = var.eks.create ? { for key, group in var.eks.new.node_groups : key => group } : {}
+  cluster_name    = aws_eks_cluster.main[0].name
   node_group_name = "${local.pxa_prefix}-eks-node-group"
-  node_role_arn   = aws_iam_role.eks_main_node[count.index].arn
+  node_role_arn   = aws_iam_role.eks_main_node[0].arn
   subnet_ids      = var.vpc.subnets.private
 
   scaling_config {
-    desired_size = var.eks.eks_node_group.desired_size
-    max_size     = var.eks.eks_node_group.max_size
-    min_size     = var.eks.eks_node_group.min_size
+    desired_size = each.value.desired_size
+    max_size     = each.value.max_size
+    min_size     = each.value.min_size
   }
 
   launch_template {
-    id      = aws_launch_template.eks_node_group[count.index].id
-    version = aws_launch_template.eks_node_group[count.index].latest_version
+    id      = aws_launch_template.eks_node_group[each.key].id
+    version = aws_launch_template.eks_node_group[each.key].latest_version
   }
 
   labels = {

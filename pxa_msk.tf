@@ -1,15 +1,15 @@
 resource "aws_msk_cluster" "main" {
   count                  = var.msk.create ? 1 : 0
-  cluster_name           = "${local.pxa_prefix}-msk-main"
+  cluster_name           = "${local.pxa_prefix}-msk"
   kafka_version          = "3.6.0"
-  number_of_broker_nodes = var.msk.number_of_broker_nodes  
+  number_of_broker_nodes = var.msk.new.number_of_broker_nodes
 
   broker_node_group_info {
-    instance_type  = var.msk.instance_type
+    instance_type  = var.msk.new.instance_type
     client_subnets = var.vpc.subnets.private
     storage_info {
       ebs_storage_info {
-        volume_size = var.msk.volume_size
+        volume_size = var.msk.new.volume_size
       }
     }
     security_groups = [aws_security_group.allow_msk[count.index].id]
@@ -36,7 +36,7 @@ resource "aws_msk_cluster" "main" {
   }
 
   tags = {
-    Name        = "${local.pxa_prefix}-msk-main"
+    Name        = "${local.pxa_prefix}-msk"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
@@ -45,11 +45,11 @@ resource "aws_msk_cluster" "main" {
 }
 
 resource "aws_cloudwatch_log_group" "main" {
-  count  = var.msk.create ? 1 : 0
-  name   = "/aws/msk/${local.pxa_prefix}"
+  count = var.msk.create ? 1 : 0
+  name  = "/aws/msk/${local.pxa_prefix}"
 
   tags = {
-    Name        = "${local.pxa_prefix}-lg-msk-main"
+    Name        = "${local.pxa_prefix}-lg-msk"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
@@ -60,7 +60,7 @@ resource "aws_cloudwatch_log_group" "main" {
 resource "aws_msk_configuration" "main" {
   count          = var.msk.create ? 1 : 0
   kafka_versions = ["3.4.0"]
-  name           = "${local.pxa_prefix}-msk-config-main"
+  name           = "${local.pxa_prefix}-msk-config"
 
   server_properties = <<PROPERTIES
 auto.create.topics.enable = true

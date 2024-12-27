@@ -2,6 +2,7 @@ locals {
   pxa_project_name = "${var.PROJECT_PRENAME}pxa"
   pxa_prefix       = "${local.pxa_project_name}-${var.PROJECT_CUSTOMER}-${var.PROJECT_ENV}"
 
+  // ************************************* Inputs
   ec2 = {
     security_groups : {
       "bastion" : aws_security_group.bastion.id
@@ -11,8 +12,6 @@ locals {
     }
   }
 
-  keys = { for item in distinct([for item, _ in var.ec2.instances : element(split("-", item), 0)]) : item => {} }
-
   ecr = {
     names = [
       "carter-analytics-api",
@@ -21,9 +20,6 @@ locals {
     ]
     "imagetag" : "IMMUTABLE"
   }
-
-  eks_oidc_url = var.eks.create ? aws_eks_cluster.main[0].identity[0].oidc[0].issuer : ""
-  eks_oidc_arn = var.eks.create ? aws_iam_openid_connect_provider.eks[0].arn : ""
 
   databases = {
     mongo = {
@@ -39,4 +35,16 @@ locals {
       }
     }
   }
+
+  // ************************************* Computes
+  keys = { for item in distinct([for item, _ in var.ec2.instances : element(split("-", item), 0)]) : item => {} }
+
+  eks = {
+    oidc = {
+      url = var.eks.create ? aws_eks_cluster.main[0].identity[0].oidc[0].issuer : var.eks.existing.openid_connect.issuer
+      arn = var.eks.create ? aws_iam_openid_connect_provider.eks[0].arn : var.eks.existing.openid_connect.arn
+    }
+  }
+
+  msk = { bootstrap_brokers = var.msk.create ? aws_msk_cluster.msk.new.bootstrap_brokers : var.msk.existing.bootstrap_brokers }
 }

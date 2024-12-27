@@ -42,17 +42,17 @@ data "aws_iam_policy_document" "aws_load_balancer_controller_assume_role_policy"
 
     condition {
       test     = "StringEquals"
-      variable = "${var.eks.create ? replace(local.eks_oidc_url, "https://", "") : ""}:sub"
+      variable = "${var.eks.create ? replace(local.eks.oidc.url, "https://", "") : ""}:sub"
       values   = ["system:serviceaccount:kube-system:aws-load-balancer-controller"]
     }
     condition {
       test     = "StringEquals"
-      variable = "${var.eks.create ? replace(local.eks_oidc_url, "https://", "") : ""}:aud"
+      variable = "${var.eks.create ? replace(local.eks.oidc.url, "https://", "") : ""}:aud"
       values   = ["sts.amazonaws.com"]
     }
 
     principals {
-      identifiers = [local.eks_oidc_arn]
+      identifiers = [local.eks_oidc.arn]
       type        = "Federated"
     }
   }
