@@ -68,7 +68,7 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
       url     = substr(element(split(",", local.msk.bootstrap_brokers), 0), 4, -1)
     }
     lambda = {
-      name = aws_lambda_function.lambda.function_name
+      name = aws_lambda_function.event.function_name
     }
     s3s = {
       static = {
