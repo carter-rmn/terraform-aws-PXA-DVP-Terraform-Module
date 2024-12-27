@@ -38,7 +38,6 @@ variable "msk" {
       bootstrap_brokers      = string
     })
     existing = object({
-      id                = string
       bootstrap_brokers = string
     })
   })
