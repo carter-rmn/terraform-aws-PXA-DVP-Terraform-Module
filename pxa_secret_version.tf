@@ -60,9 +60,9 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
       }
     }
     msk = {
-      address = substr(element(split(":", element(split(",", aws_msk_cluster.msk.bootstrap_brokers), 0)), 0), 4, -1)
-      port    = element(split(":", element(split(",", aws_msk_cluster.msk.bootstrap_brokers), 0)), 1)
-      url     = substr(element(split(",", aws_msk_cluster.msk.bootstrap_brokers), 0), 4, -1)
+      address = var.msk.create ? substr(element(split(":", element(split(",", aws_msk_cluster.msk.new.bootstrap_brokers), 0)), 0), 4, -1) : var.msk.existing.bootstrap_brokers
+      port    = var.msk.create ? element(split(":", element(split(",", aws_msk_cluster.msk.new.bootstrap_brokers), 0)), 1) : var.msk.existing.bootstrap_brokers
+      url     = var.msk.create ? substr(element(split(",", aws_msk_cluster.msk.new.bootstrap_brokers), 0), 4, -1) : var.msk.existing.bootstrap_brokers
     }
   })
 }

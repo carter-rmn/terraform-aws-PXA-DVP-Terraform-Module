@@ -35,9 +35,11 @@ variable "msk" {
       number_of_broker_nodes = number
       instance_type          = string
       volume_size            = number
+      bootstrap_brokers      = string
     })
     existing = object({
-      id = string
+      id                = string
+      bootstrap_brokers = string
     })
   })
 }
