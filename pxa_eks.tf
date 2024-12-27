@@ -1,6 +1,6 @@
 resource "aws_eks_cluster" "main" {
   count                     = var.eks.create ? 1 : 0
-  name                      = "${local.pxa_prefix}-eks-main"
+  name                      = "${local.pxa_prefix}-eks"
   enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
   role_arn                  = aws_iam_role.role_eks[count.index].arn
   version                   = "1.29"
@@ -11,7 +11,7 @@ resource "aws_eks_cluster" "main" {
   }
 
   tags = {
-    Name        = "${local.pxa_prefix}-eks-main"
+    Name        = "${local.pxa_prefix}-eks"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
