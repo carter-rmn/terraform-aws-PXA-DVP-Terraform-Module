@@ -39,7 +39,7 @@ locals {
   eks = {
     oidc = {
       url = var.eks.create ? aws_eks_cluster.main[0].identity[0].oidc[0].issuer : var.eks.existing.openid_connect.issuer
-      arn = var.eks.create ? aws_iam_openid_connect_provider.eks[0].arn : var.eks.existing.openid_connect.arn
+      arn = var.eks.create ? aws_iam_openid_connect_provider.eks_main[0].arn : var.eks.existing.openid_connect.arn
     }
   }
 

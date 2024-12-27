@@ -33,7 +33,7 @@ resource "aws_iam_role_policy_attachment" "attachment_eks_cluster" {
 resource "aws_iam_role_policy_attachment" "attachment_eks_vpc" {
   count      = var.eks.create ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-  role = aws_iam_role.eks_main[count.index].name
+  role       = aws_iam_role.eks_main[count.index].name
 }
 
 resource "aws_iam_role_policy_attachment" "attachment_ecr_access" {
@@ -54,12 +54,12 @@ resource "aws_iam_role" "ebs_csi_driver" {
         Action = "sts:AssumeRoleWithWebIdentity"
         Effect = "Allow"
         Principal = {
-          Federated = aws_iam_openid_connect_provider.eks[count.index].arn
+          Federated = aws_iam_openid_connect_provider.eks_main[count.index].arn
         }
         Condition = {
           StringEquals = {
-            "${replace(aws_eks_cluster.main[count.index].identity[0].oidc[0].issuer, "https://", "")}:sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa",
-            "${replace(aws_eks_cluster.main[count.index].identity[0].oidc[0].issuer, "https://", "")}:aud": "sts.amazonaws.com"
+            "${replace(aws_eks_cluster.main[count.index].identity[0].oidc[0].issuer, "https://", "")}:sub" : "system:serviceaccount:kube-system:ebs-csi-controller-sa",
+            "${replace(aws_eks_cluster.main[count.index].identity[0].oidc[0].issuer, "https://", "")}:aud" : "sts.amazonaws.com"
           }
         }
       }
