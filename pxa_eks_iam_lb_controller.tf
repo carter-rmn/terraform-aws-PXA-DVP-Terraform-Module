@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "aws_load_balancer_controller_assume_role_policy"
     }
 
     principals {
-      identifiers = [local.eks_oidc.arn]
+      identifiers = [local.eks.oidc.arn]
       type        = "Federated"
     }
   }
