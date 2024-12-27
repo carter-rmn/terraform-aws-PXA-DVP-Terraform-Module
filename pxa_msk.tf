@@ -1,6 +1,6 @@
 resource "aws_msk_cluster" "main" {
   count                  = var.msk.create ? 1 : 0
-  cluster_name           = "${local.pxa_prefix}-msk-main"
+  cluster_name           = "${local.pxa_prefix}-msk"
   kafka_version          = "3.6.0"
   number_of_broker_nodes = var.msk.new.number_of_broker_nodes
 
@@ -36,7 +36,7 @@ resource "aws_msk_cluster" "main" {
   }
 
   tags = {
-    Name        = "${local.pxa_prefix}-msk-main"
+    Name        = "${local.pxa_prefix}-msk"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
@@ -49,7 +49,7 @@ resource "aws_cloudwatch_log_group" "main" {
   name  = "/aws/msk/${local.pxa_prefix}"
 
   tags = {
-    Name        = "${local.pxa_prefix}-lg-msk-main"
+    Name        = "${local.pxa_prefix}-lg-msk"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
@@ -60,7 +60,7 @@ resource "aws_cloudwatch_log_group" "main" {
 resource "aws_msk_configuration" "main" {
   count          = var.msk.create ? 1 : 0
   kafka_versions = ["3.4.0"]
-  name           = "${local.pxa_prefix}-msk-config-main"
+  name           = "${local.pxa_prefix}-msk-config"
 
   server_properties = <<PROPERTIES
 auto.create.topics.enable = true
