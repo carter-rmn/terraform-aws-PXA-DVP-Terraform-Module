@@ -22,21 +22,10 @@ resource "aws_secretsmanager_secret" "ec2s" {
   }
 }
 
-resource "aws_secretsmanager_secret" "kafka_connector" {
-  name = "${local.pxa_prefix}-secret-kafka-connector"
+resource "aws_secretsmanager_secret" "pxa_secret_others" {
+  name = "${local.pxa_prefix}-secret-others"
   tags = {
-    Name        = "${local.pxa_prefix}-secret-kafka-connector"
-    Project     = "${local.pxa_project_name}"
-    Customer    = var.PROJECT_CUSTOMER
-    Environment = var.PROJECT_ENV
-    Terraform   = true
-  }
-}
-
-resource "aws_secretsmanager_secret" "api" {
-  name = "${local.pxa_prefix}-secret-api"
-  tags = {
-    Name        = "${local.pxa_prefix}-secret-api"
+    Name        = "${local.pxa_prefix}-secret-others"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
