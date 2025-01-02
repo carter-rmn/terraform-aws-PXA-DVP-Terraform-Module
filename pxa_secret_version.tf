@@ -60,7 +60,7 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
       }
     }
     ecr = {
-      domain = element(split("/", aws_ecr_repository.ecrs["carter-analytics-api"].repository_url), 0)
+      domain = element(split("/", aws_ecr_repository.ecrs["api"].repository_url), 0)
     }
     msk = {
       address = substr(element(split(":", element(split(",", local.msk.bootstrap_brokers), 0)), 0), 4, -1)
