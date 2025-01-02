@@ -33,6 +33,17 @@ resource "aws_secretsmanager_secret" "pxa_secret_others" {
   }
 }
 
+resource "aws_secretsmanager_secret" "event_secret_lambda" {
+  name = "${local.pxa_prefix}-secret-event-lambda"
+  tags = {
+    Name        = "${local.pxa_prefix}-secret-event-lambda"
+    Project     = "${local.pxa_project_name}"
+    Customer    = var.PROJECT_CUSTOMER
+    Environment = var.PROJECT_ENV
+    Terraform   = true
+  }
+}
+
 resource "aws_secretsmanager_secret" "kestra" {
   name = "${local.pxa_prefix}-secret-kestra"
   tags = {
