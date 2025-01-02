@@ -14,7 +14,7 @@ locals {
   }
 
   ecr = {
-    "carter-analytics-api" : {}
+    "api" : {}
     "analytics-dashboard" : {}
     "kafka-connector" : {}
   }
