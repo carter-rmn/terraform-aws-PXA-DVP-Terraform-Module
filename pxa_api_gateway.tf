@@ -357,13 +357,15 @@ resource "aws_api_gateway_deployment" "deployment" {
     aws_api_gateway_integration.event_post,
     aws_api_gateway_integration.authenticate_integration,
     aws_api_gateway_integration.geolocation_integration,
+    aws_api_gateway_integration.event_options_integration,
+    aws_api_gateway_integration.authenticate_options_integration,
     aws_api_gateway_integration_response.event_post_200,
     aws_api_gateway_integration_response.event_post_400,
     aws_api_gateway_integration_response.event_post_401,
     aws_api_gateway_integration_response.event_post_403,
     aws_api_gateway_integration_response.event_post_500,
-    aws_api_gateway_integration.event_options_integration,
-    aws_api_gateway_integration.authenticate_options_integration
+    aws_api_gateway_integration_response.event_options_integration_response,
+    aws_api_gateway_integration_response.authenticate_options_integration_response
   ]
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
 }
