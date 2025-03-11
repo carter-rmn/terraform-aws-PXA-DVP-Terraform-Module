@@ -3,6 +3,12 @@ locals {
   pxa_prefix       = "${local.pxa_project_name}-${var.PROJECT_CUSTOMER}-${var.PROJECT_ENV}"
 
   // ************************************* Inputs
+  ecr = {
+    "api" : {}
+    "analytics-dashboard" : {}
+    "kafka-connector" : {}
+  }
+
   ec2 = {
     security_groups : {
       "ansible" : aws_security_group.ansible.id
@@ -13,10 +19,12 @@ locals {
     }
   }
 
-  ecr = {
-    "api" : {}
-    "analytics-dashboard" : {}
-    "kafka-connector" : {}
+  users = {
+    "static" = { policy = { action = [] } }
+  }
+
+  s3s = {
+    static = { publicly_readable = false, users = ["static"] }
   }
 
   databases = {
@@ -24,7 +32,7 @@ locals {
       port = 27017
       pxa = {
         name = "carter-analytics"
-        usernames = {
+        users = {
           root   = "root"
           admin  = "admin"
           app    = "carter_analytics"
@@ -45,4 +53,16 @@ locals {
   }
 
   msk = { bootstrap_brokers = var.msk.create ? aws_msk_cluster.main[0].bootstrap_brokers : var.msk.existing.bootstrap_brokers }
+
+  s3_users = flatten(
+    [
+      for name, s3 in local.s3s : [
+        for user in s3.users : {
+          name = name
+          s3   = s3
+          user = user
+        }
+      ]
+    ]
+  )
 }

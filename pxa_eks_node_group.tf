@@ -43,7 +43,7 @@ resource "aws_launch_template" "eks_main_node_group" {
   }
 }
 
-resource "aws_eks_node_group" "eks_main_node_group" {
+resource "aws_eks_node_group" "eks_main" {
   for_each        = var.eks.create ? { for key, group in var.eks.new.node_groups : key => group } : {}
   cluster_name    = aws_eks_cluster.main[0].name
   node_group_name = "${local.pxa_prefix}-eks-node-group-main"

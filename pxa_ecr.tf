@@ -15,3 +15,10 @@ resource "aws_ecr_repository" "ecrs" {
     Terraform   = true
   }
 }
+
+resource "aws_ecr_lifecycle_policy" "ecr_policy" {
+  for_each   = local.ecr
+  repository = "${local.pxa_prefix}-ecr-${each.key}"
+  policy     = data.aws_ecr_lifecycle_policy_document.ecr_lifecycle.json
+  depends_on = [aws_ecr_repository.ecrs]
+}
