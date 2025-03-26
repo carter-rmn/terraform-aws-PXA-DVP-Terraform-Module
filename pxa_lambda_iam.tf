@@ -21,15 +21,6 @@ resource "aws_iam_role" "lambda" {
   }
 }
 
-# Use data sources to confirm policy ARNs
-data "aws_iam_policy" "lambda_basic_execution" {
-  arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-}
-
-data "aws_iam_policy" "lambda_vpc_access_execution" {
-  arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
-}
-
 resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
   role       = aws_iam_role.lambda.name
   policy_arn = data.aws_iam_policy.lambda_basic_execution.arn

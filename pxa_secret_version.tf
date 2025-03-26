@@ -25,7 +25,7 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
       }
     }
     mongo = {
-      pxa = { # to-do: make mongo and its users dynamic
+      pxa = {
         name        = local.databases.mongo.pxa.name
         port        = local.databases.mongo.port
         private_ip  = aws_instance.ec2s["mongo-pxa-1"].private_ip
@@ -33,22 +33,16 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
         public_dns  = aws_instance.ec2s["mongo-pxa-1"].public_dns
         public_ip   = aws_instance.ec2s["mongo-pxa-1"].public_ip
         users = {
-          root = {
-            username = local.databases.mongo.pxa.usernames.root
-            password = random_password.mongo_pxa_root_password.result
-          }
-          app = {
-            username          = local.databases.mongo.pxa.usernames.app
-            password          = random_password.mongo_pxa_app_password.result
-            connection_string = "mongodb://${local.databases.mongo.pxa.usernames.app}:${random_password.mongo_pxa_app_password.result}@${join(",", [for item in aws_instance.ec2s : "${item.private_ip}:${local.databases.mongo.port}" if length(regexall("(mongo-pxa-\\d+)", item.tags.Short)) > 0])}/${local.databases.mongo.pxa.name}?authSource=admin${length([for item in aws_instance.ec2s : 1 if length(regexall("(mongo-pxa-\\d+)", item.tags.Short)) > 0]) > 1 ? "&replicaSet=rmn" : ""}"
-          }
-          viewer = {
-            username          = local.databases.mongo.pxa.usernames.viewer
-            password          = random_password.mongo_pxa_viewer_password.result
-            connection_string = "mongodb://${local.databases.mongo.pxa.usernames.viewer}:${random_password.mongo_pxa_viewer_password.result}@${join(",", [for item in aws_instance.ec2s : "${item.private_ip}:${local.databases.mongo.port}" if length(regexall("(mongo-pxa-\\d+)", item.tags.Short)) > 0])}/${local.databases.mongo.pxa.name}?authSource=admin${length([for item in aws_instance.ec2s : 1 if length(regexall("(mongo-pxa-\\d+)", item.tags.Short)) > 0]) > 1 ? "&replicaSet=rmn" : ""}"
+          for user, username in local.databases.mongo.pxa.users : user => {
+            username          = username
+            password          = random_password.mongo["pxa_mongo_${user}"].result
+            connection_string = "mongodb://${username}:${random_password.mongo["pxa_mongo_${user}"].result}@${join(",", [for item in aws_instance.ec2s : "${item.private_ip}:${local.databases.mongo.port}" if length(regexall("(mongo-pxa-\\d+)", item.tags.Short)) > 0])}/${local.databases.mongo.pxa.name}?authSource=admin${length([for item in aws_instance.ec2s : 1 if length(regexall("(mongo-pxa-\\d+)", item.tags.Short)) > 0]) > 1 ? "&replicaSet=rmn" : ""}"
           }
         }
       }
+    }
+    ecr = {
+      domain = element(split("/", aws_ecr_repository.ecrs["api"].repository_url), 0)
     }
     eks = {
       created = var.eks.create
@@ -59,9 +53,6 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
         }
       }
     }
-    ecr = {
-      domain = element(split("/", aws_ecr_repository.ecrs["api"].repository_url), 0)
-    }
     msk = {
       address = substr(element(split(":", element(split(",", local.msk.bootstrap_brokers), 0)), 0), 4, -1)
       port    = element(split(":", element(split(",", local.msk.bootstrap_brokers), 0)), 1)
@@ -71,9 +62,10 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
       name = aws_lambda_function.event.function_name
     }
     s3s = {
-      static = {
-        name   = aws_s3_bucket.static.bucket
-        domain = aws_s3_bucket.static.bucket_domain_name
+      for key, value in local.s3s :
+      key => {
+        name   = aws_s3_bucket.s3s[key].bucket
+        domain = aws_s3_bucket.s3s[key].bucket_domain_name
       }
     }
   })
