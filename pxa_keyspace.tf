@@ -74,10 +74,6 @@ resource "aws_keyspaces_table" "carter_analytics_events" {
       name = "updated_at"
       type = "timestamp"
     }
-    column {
-      name = "utm_parameter_arr"
-      type = "list<map<text, text>>"
-    }
   }
 
   point_in_time_recovery {
