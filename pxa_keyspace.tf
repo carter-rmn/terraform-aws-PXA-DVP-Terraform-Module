@@ -77,6 +77,7 @@ resource "aws_keyspaces_table" "carter_analytics_events" {
     column {
       name = "utm_parameter_arr"
       type = "frozen<list<map<text, text>>>"
+
     }
   }
 
