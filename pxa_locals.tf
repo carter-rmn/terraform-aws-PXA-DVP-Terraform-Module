@@ -7,6 +7,7 @@ locals {
     "api" : {}
     "analytics-dashboard" : {}
     "kafka-connector" : {}
+    "kafka-mongo-connector" : {}
   }
 
   ec2 = {
