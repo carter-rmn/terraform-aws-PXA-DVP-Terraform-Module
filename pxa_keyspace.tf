@@ -14,6 +14,9 @@ resource "aws_keyspaces_table" "carter_analytics_events" {
   keyspace_name = aws_keyspaces_keyspace.carter_analytics.name
   table_name    = "carter_analytics_events"
 
+  lifecycle {
+  ignore_changes = [schema_definition]
+}
   schema_definition {
     partition_key {
       name = "client_id"
