@@ -1,4 +1,5 @@
 resource "aws_keyspaces_keyspace" "carter_analytics" {
+  count                     = var.keyspace.create ? 1 : 0
   name = replace("${local.pxa_prefix}-keyspace-carter-analytics", "-", "_")
 
   tags = {
@@ -11,6 +12,7 @@ resource "aws_keyspaces_keyspace" "carter_analytics" {
 }
 
 resource "aws_keyspaces_table" "carter_analytics_events" {
+  count         = var.keyspace.create ? 1 : 0
   keyspace_name = aws_keyspaces_keyspace.carter_analytics.name
   table_name    = "carter_analytics_events"
 

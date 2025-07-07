@@ -42,6 +42,18 @@ variable "msk" {
   })
 }
 
+variable "keyspace" {
+  type = object({
+    create = bool
+    new = object({
+      name = string
+    })
+    existing = object({
+      name = string
+    })
+  })
+  
+}
 variable "eks" {
   type = object({
     create = bool
