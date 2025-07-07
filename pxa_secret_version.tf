@@ -13,7 +13,7 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
       }
     }
     keyspace = {
-      name = aws_keyspaces_keyspace.carter_analytics[0].name
+      name = try(aws_keyspaces_keyspace.carter_analytics[0].name, null)
     }
     app_user = {
       access_key = aws_iam_access_key.user_keys["app"].id
@@ -28,10 +28,10 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
       pxa = {
         name        = local.databases.mongo.pxa.name
         port        = local.databases.mongo.port
-        private_ip  = aws_instance.ec2s["mongo-pxa-1"].private_ip
-        private_dns = aws_instance.ec2s["mongo-pxa-1"].private_dns
-        public_dns  = aws_instance.ec2s["mongo-pxa-1"].public_dns
-        public_ip   = aws_instance.ec2s["mongo-pxa-1"].public_ip
+        private_ip  = try(aws_instance.ec2s["mongo-pxa-1"].private_ip, null)
+        private_dns = try(aws_instance.ec2s["mongo-pxa-1"].private_dns, null)
+        public_dns  = try(aws_instance.ec2s["mongo-pxa-1"].public_dns, null)
+        public_ip   = try(aws_instance.ec2s["mongo-pxa-1"].public_ip, null)
         users = {
           for user, username in local.databases.mongo.pxa.users : user => {
             username          = username
