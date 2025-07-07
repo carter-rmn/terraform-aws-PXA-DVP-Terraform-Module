@@ -13,7 +13,7 @@ resource "aws_keyspaces_keyspace" "carter_analytics" {
 
 resource "aws_keyspaces_table" "carter_analytics_events" {
   count         = var.keyspace.create ? 1 : 0
-  keyspace_name = aws_keyspaces_keyspace.carter_analytics.name
+  keyspace_name = aws_keyspaces_keyspace.carter_analytics[0].name
   table_name    = "carter_analytics_events"
 
   lifecycle {
