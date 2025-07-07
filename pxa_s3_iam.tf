@@ -38,12 +38,14 @@ resource "aws_iam_user_policy" "pxa" {
           "cassandra:Describe",
           "cassandra:Execute"
         ]
-        Resource = [
+        Resource = compact([
           "arn:aws:cassandra:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:/keyspace/system*",
-          aws_keyspaces_keyspace.carter_analytics != null && length(aws_keyspaces_keyspace.carter_analytics) > 0 ?
+          (
+            aws_keyspaces_keyspace.carter_analytics != null && length(aws_keyspaces_keyspace.carter_analytics) > 0
+          ) ?
             "arn:aws:cassandra:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:/keyspace/${aws_keyspaces_keyspace.carter_analytics[0].name}/table/*"
           : null
-        ]
+        ])
       },
       {
         Sid    = "ListVPCEndpoints"
