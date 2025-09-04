@@ -48,8 +48,8 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
       created = var.eks.create
       name    = var.eks.create ? "${local.pxa_prefix}-eks" : var.eks.existing.name
       roles = {
-        lb_contorller = {
-          arn = var.eks.create ? aws_iam_role.lb_controller[0].arn : var.eks.existing.lb_contorller_arn
+        lb_controller = {
+          arn = var.eks.create ? aws_iam_role.lb_controller[0].arn : var.eks.existing.lb_controller_arn
         }
       }
     }

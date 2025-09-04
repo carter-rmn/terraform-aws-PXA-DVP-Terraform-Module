@@ -52,7 +52,7 @@ variable "keyspace" {
       name = string
     })
   })
-  
+
 }
 variable "eks" {
   type = object({
@@ -67,7 +67,7 @@ variable "eks" {
     })
     existing = object({
       name              = string
-      lb_contorller_arn = string
+      lb_controller_arn = string
       openid_connect = object({
         issuer = string
         arn    = string
