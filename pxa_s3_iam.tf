@@ -24,7 +24,8 @@ resource "aws_iam_user_policy" "pxa" {
           "s3:DeleteObject"
         ]
         Resource = [
-          "${"${aws_s3_bucket.s3s[each.value.name].arn}"}/*"
+          "${"${aws_s3_bucket.s3s[each.value.name].arn}"}/*",
+          "${"${aws_s3_bucket.s3s[each.value.name].arn}"}"
         ]
       },
       {
