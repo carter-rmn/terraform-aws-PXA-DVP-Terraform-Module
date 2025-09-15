@@ -13,7 +13,7 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
       }
     }
     keyspace = {
-      name = local.keyspace_name
+      name = try(aws_keyspaces_keyspace.carter_analytics[0].name, var.keyspace.existing.name)
     }
     app_user = {
       access_key = aws_iam_access_key.user_keys["app"].id
