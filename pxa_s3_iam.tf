@@ -35,9 +35,7 @@ resource "aws_iam_user_policy" "pxa" {
           "cassandra:Modify",
           "cassandra:Create",
           "cassandra:Alter",
-          "cassandra:Drop",
-          "cassandra:Describe",
-          "cassandra:Execute"
+          "cassandra:Drop"
         ]
         Resource = compact([
           "arn:aws:cassandra:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:/keyspace/system*",

@@ -25,6 +25,10 @@ locals {
     "static" = { policy = { action = [] } }
   }
 
+  keyspace_name = var.keyspace.create
+    ? one(aws_keyspaces_keyspace.carter_analytics[*].name)
+    : var.keyspace.existing.name
+
   s3s = {
     static = { publicly_readable = false, users = ["static"] }
   }
