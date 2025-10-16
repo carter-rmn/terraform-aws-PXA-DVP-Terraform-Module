@@ -1,0 +1,18 @@
+name: TruffleHog Scan
+on:
+  push:
+    branches: ['*']
+  pull_request:
+    branches: ['*']
+
+
+jobs:
+  trufflehog-scan:
+    runs-on: rmn-shyftlabs-sbx-ec2-cicd
+
+    steps:
+      - name: Run TruffleHog Composite Action
+        uses: carter-rmn/GLB-DVP-GitHub-Runner-Template/.github/actions/trufflehog@main
+        with:
+          base: ${{ github.event.pull_request.base.sha }}
+          head: ${{ github.event.pull_request.head.sha }}
