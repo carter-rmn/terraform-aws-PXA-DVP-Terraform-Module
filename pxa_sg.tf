@@ -160,14 +160,14 @@ resource "aws_security_group" "lambda" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = concat(var.vpc.cidr_blocks.private, var.vpc.cidr_blocks.database, var.vpc.cidr_blocks.public)
   }
 
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = concat(var.vpc.cidr_blocks.private, var.vpc.cidr_blocks.database, var.vpc.cidr_blocks.public)
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
