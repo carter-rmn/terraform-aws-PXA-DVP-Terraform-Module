@@ -5,6 +5,11 @@ resource "aws_instance" "ec2s" {
   instance_type = each.value.instance_type
   key_name      = "${local.pxa_prefix}-ec2-${element(split("-", each.key), 0)}"
 
+  metadata_options {
+    http_tokens   = "required"
+    http_endpoint = "enabled"
+  }
+
   vpc_security_group_ids = compact([
     var.vpc.default_security_group.id,
     aws_security_group.allow_ssh.id,
