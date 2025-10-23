@@ -167,7 +167,7 @@ resource "aws_security_group" "lambda" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = concat(var.vpc.cidr_blocks.private, var.vpc.cidr_blocks.database, var.vpc.cidr_blocks.public)
   }
 
   tags = {
@@ -208,31 +208,31 @@ resource "aws_security_group" "mongo" {
   }
 }
 
-resource "aws_security_group" "openvpn" {
-  name        = "${local.pxa_prefix}-sg-openvpn"
-  description = "Allow Openvpn Connection"
-
-  vpc_id = var.vpc.id
-
-  ingress {
-    from_port   = 1194
-    to_port     = 1194
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name        = "${local.pxa_prefix}-sg-openvpn"
-    Project     = local.pxa_project_name
-    Customer    = var.PROJECT_CUSTOMER
-    Environment = var.PROJECT_ENV
-    Terraform   = true
-  }
-}
+#resource "aws_security_group" "openvpn" {
+#  name        = "${local.pxa_prefix}-sg-openvpn"
+#  description = "Allow Openvpn Connection"
+#
+#  vpc_id = var.vpc.id
+#
+#  ingress {
+#    from_port   = 1194
+#    to_port     = 1194
+#    protocol    = "tcp"
+#    cidr_blocks = ["0.0.0.0/0"]
+#  }
+#
+#  egress {
+#    from_port   = 0
+#    to_port     = 0
+#    protocol    = "-1"
+#    cidr_blocks = ["0.0.0.0/0"]
+#  }
+#
+#  tags = {
+#    Name        = "${local.pxa_prefix}-sg-openvpn"
+#    Project     = local.pxa_project_name
+#    Customer    = var.PROJECT_CUSTOMER
+#    Environment = var.PROJECT_ENV
+#    Terraform   = true
+#  }
+#}
