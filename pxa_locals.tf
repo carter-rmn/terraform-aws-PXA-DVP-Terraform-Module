@@ -16,6 +16,7 @@ locals {
       "bastion" : aws_security_group.bastion.id
       "cicd" : aws_security_group.cicd.id
       "mongo" : aws_security_group.mongo.id
+      "dataflows" : aws_security_group.dataflows.id
       #"openvpn" : aws_security_group.openvpn.id
     }
   }

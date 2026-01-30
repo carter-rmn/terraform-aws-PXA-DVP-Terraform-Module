@@ -208,8 +208,8 @@ resource "aws_security_group" "mongo" {
   }
 }
 
-resource "aws_security_group" "data-flows" {
-  name        = "${local.pxa_prefix}-sg-data-flows"
+resource "aws_security_group" "dataflows" {
+  name        = "${local.pxa_prefix}-sg-dataflows"
   description = "Allow Data Flows Connection"
 
   vpc_id = var.vpc.id
@@ -229,7 +229,7 @@ resource "aws_security_group" "data-flows" {
   }
 
   tags = {
-    Name        = "${local.pxa_prefix}-sg-data-flows"
+    Name        = "${local.pxa_prefix}-sg-dataflows"
     Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
