@@ -208,6 +208,35 @@ resource "aws_security_group" "mongo" {
   }
 }
 
+resource "aws_security_group" "data-flows" {
+  name        = "${local.pxa_prefix}-sg-data-flows"
+  description = "Allow Data Flows Connection"
+
+  vpc_id = var.vpc.id
+
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "tcp"
+    cidr_blocks = concat(var.vpc.cidr_blocks.private, var.vpc.cidr_blocks.database, var.vpc.cidr_blocks.public)
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name        = "${local.pxa_prefix}-sg-data-flows"
+    Project     = local.pxa_project_name
+    Customer    = var.PROJECT_CUSTOMER
+    Environment = var.PROJECT_ENV
+    Terraform   = true
+  }
+}
+
 #resource "aws_security_group" "openvpn" {
 #  name        = "${local.pxa_prefix}-sg-openvpn"
 #  description = "Allow Openvpn Connection"
