@@ -229,7 +229,7 @@ resource "aws_security_group" "data-flows" {
   }
 
   tags = {
-    Name        = "${local.pxa_prefix}-sg-mongo"
+    Name        = "${local.pxa_prefix}-sg-data-flows"
     Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
