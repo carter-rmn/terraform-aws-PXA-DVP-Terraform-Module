@@ -83,6 +83,7 @@ variable "ec2" {
       instance_type = string
       subnet_index  = number
       volume_size   = number
+      volume_type   = string
       public        = bool
     }))
   })
