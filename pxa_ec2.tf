@@ -23,6 +23,8 @@ resource "aws_instance" "ec2s" {
 
   root_block_device {
     volume_size = each.value.volume_size
+    volume_type = each.value.volume_type
+
     tags = {
       Name        = "${local.pxa_prefix}-ebs-${each.key}-default"
       Project     = "${local.pxa_project_name}"
