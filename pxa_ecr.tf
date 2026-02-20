@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "ecrs" {
-  for_each             = local.ecr
+  for_each             = toset(var.ecr.repositories)
   name                 = "${local.pxa_prefix}-ecr-${each.key}"
   image_tag_mutability = "MUTABLE"
 
@@ -17,7 +17,7 @@ resource "aws_ecr_repository" "ecrs" {
 }
 
 resource "aws_ecr_lifecycle_policy" "ecr_policy" {
-  for_each   = local.ecr
+  for_each   = toset(var.ecr.repositories)
   repository = "${local.pxa_prefix}-ecr-${each.key}"
   policy     = data.aws_ecr_lifecycle_policy_document.ecr_lifecycle.json
   depends_on = [aws_ecr_repository.ecrs]

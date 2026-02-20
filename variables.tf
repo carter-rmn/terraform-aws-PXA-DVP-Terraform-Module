@@ -1,6 +1,13 @@
 # AWS
 variable "AWS_REGION" {}
 
+variable "ecr" {
+  type = object({
+    repositories = list(string)
+  })
+  description = "ECR repositories to create. List of repository names."
+}
+
 # PROJECT
 variable "PROJECT_CUSTOMER" {}
 variable "PROJECT_ENV" {}
