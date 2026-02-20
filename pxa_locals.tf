@@ -3,12 +3,6 @@ locals {
   pxa_prefix       = "${local.pxa_project_name}-${var.PROJECT_CUSTOMER}-${var.PROJECT_ENV}"
 
   // ************************************* Inputs
-  ecr = {
-    "api" : {}
-    "analytics-dashboard" : {}
-    "kafka-connector" : {}
-    "kafka-mongo-connector" : {}
-  }
 
   ec2 = {
     security_groups : {
