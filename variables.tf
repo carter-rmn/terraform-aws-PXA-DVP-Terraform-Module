@@ -102,3 +102,9 @@ variable "api_gateway" {
     geolocation_uri  = string
   })
 }
+
+variable "pod_identity" {
+  type = object({
+    enabled = bool
+  })
+}
