@@ -73,7 +73,7 @@ locals {
 
   app_roles_eks = {
     for user, config in local.users : user => config
-    if var.eks.new.addons.pod_identity.enabled
+    if var.pod_identity.enabled
   }
 
   app_roles_s3 = flatten([
