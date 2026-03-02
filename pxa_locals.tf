@@ -62,4 +62,28 @@ locals {
       ]
     ]
   )
+
+  pod_identity_apps = merge(
+    {
+      "app" = { role_key = "app" }
+      "static" = { role_key = "static" }
+
+    }
+  )
+
+  app_roles_eks = {
+    for user, config in local.users : user => config
+    if var.pod_identity.enabled
+  }
+
+  app_roles_s3 = flatten([
+    for name, config in local.s3s : [
+      for user in config.users : {
+        name   = name
+        user   = user
+        config = config
+      }
+      if contains(keys(local.app_roles_eks), user) # Only create if corresponding app_role exists
+    ]
+  ])
 }
