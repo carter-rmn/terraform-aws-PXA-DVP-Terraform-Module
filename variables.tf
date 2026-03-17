@@ -91,6 +91,7 @@ variable "ec2" {
       subnet_index  = number
       volume_size   = number
       volume_type   = string
+      subnet_type   = string
       public        = bool
     }))
   })
