@@ -15,8 +15,10 @@ resource "aws_instance" "ec2s" {
     aws_security_group.allow_ssh.id,
     local.ec2.security_groups[element(split("-", each.key), 0)]
   ])
-  subnet_id = element(each.value.public ? (var.vpc.subnets.public) : (var.vpc.subnets.private), each.value.subnet_index)
-
+  subnet_id = element(
+    each.value.subnet_type == "public" ? local.vpc.subnets.public : local.vpc.subnets.private,
+    each.value.subnet_index
+  )
   associate_public_ip_address = each.value.public
 
   depends_on = [aws_key_pair.ec2s]
