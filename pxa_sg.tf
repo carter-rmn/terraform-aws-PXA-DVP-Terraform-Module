@@ -60,6 +60,7 @@ resource "aws_security_group" "allow_ssh" {
 }
 
 resource "aws_security_group" "ansible" {
+  count       = contains(keys(var.ec2.instances), "ansible") ? 1 : 0
   name        = "${local.pxa_prefix}-sg-ansible"
   description = "Allow Ansible Operation"
 
@@ -89,6 +90,7 @@ resource "aws_security_group" "ansible" {
 }
 
 resource "aws_security_group" "bastion" {
+  count       = contains(keys(var.ec2.instances), "bastion") ? 1 : 0
   name        = "${local.pxa_prefix}-sg-bastion"
   description = "Allow Bastion Connection"
 
@@ -122,6 +124,7 @@ resource "aws_security_group" "bastion" {
 }
 
 resource "aws_security_group" "cicd" {
+  count       = contains(keys(var.ec2.instances), "cicd") ? 1 : 0
   name        = "${local.pxa_prefix}-sg-cicd"
   description = "Allow CICD Connection"
 
@@ -180,6 +183,7 @@ resource "aws_security_group" "lambda" {
 }
 
 resource "aws_security_group" "mongo" {
+  count       = contains([for k in keys(var.ec2.instances) : element(split("-", k), 0)], "mongo") ? 1 : 0
   name        = "${local.pxa_prefix}-sg-mongo"
   description = "Allow Mongo Connection"
 
@@ -209,6 +213,7 @@ resource "aws_security_group" "mongo" {
 }
 
 resource "aws_security_group" "dataflows" {
+  count       = contains(keys(var.ec2.instances), "dataflows") ? 1 : 0
   name        = "${local.pxa_prefix}-sg-dataflows"
   description = "Allow Data Flows Connection"
 
