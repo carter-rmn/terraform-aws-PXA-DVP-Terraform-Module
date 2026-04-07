@@ -16,8 +16,8 @@ locals {
   }
 
   users = {
-    "app"    = { policy = { action = [] } }
-    "static" = { policy = { action = [] } }
+    "app"    = {}
+    "static" = {}
   }
 
   s3s = {
