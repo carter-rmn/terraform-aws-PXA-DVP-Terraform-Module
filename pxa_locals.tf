@@ -21,7 +21,9 @@ locals {
   }
 
   s3s = {
-    static = { publicly_readable = false, users = ["static"] }
+    static      = { publicly_readable = false, users = ["static"] }
+    assets      = { publicly_readable = false, users = ["app"] }
+    geolocation = { publicly_readable = false, users = ["app"] }
   }
 
   databases = {
@@ -65,7 +67,7 @@ locals {
 
   pod_identity_apps = merge(
     {
-      "app" = { role_key = "app" }
+      "app"    = { role_key = "app" }
       "static" = { role_key = "static" }
 
     }
