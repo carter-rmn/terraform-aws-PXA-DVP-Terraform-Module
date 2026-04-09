@@ -45,6 +45,7 @@ variable "msk" {
     })
     existing = object({
       bootstrap_brokers = string
+      arn               = optional(string)
     })
   })
 }

@@ -37,17 +37,36 @@ resource "aws_iam_policy" "lambda_secrets_manager_policy" {
 
   policy = jsonencode({
     Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Action = [
-          "secretsmanager:GetSecretValue",
-          "secretsmanager:DescribeSecret",
-          "secretsmanager:ListSecrets"
-        ]
-        Resource = "arn:aws:secretsmanager:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:secret:${local.pxa_prefix}-*"
-      }
-    ]
+    Statement = concat(
+      [
+        {
+          Effect = "Allow"
+          Action = [
+            "secretsmanager:GetSecretValue",
+            "secretsmanager:DescribeSecret",
+            "secretsmanager:ListSecrets"
+          ]
+          Resource = "arn:aws:secretsmanager:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:secret:${local.pxa_prefix}-*"
+        }
+      ],
+      local.msk.arn != null ? [
+        {
+          Effect = "Allow"
+          Action = [
+            "kafka-cluster:Connect",
+            "kafka-cluster:DescribeTopic",
+            "kafka-cluster:WriteData",
+            "kafka-cluster:DescribeGroup",
+            "kafka-cluster:CreateTopic"
+          ]
+          Resource = [
+            local.msk.arn,
+            "${replace(local.msk.arn, ":cluster/", ":topic/")}/*",
+            "${replace(local.msk.arn, ":cluster/", ":group/")}/*",
+          ]
+        }
+      ] : []
+    )
   })
 }
 
