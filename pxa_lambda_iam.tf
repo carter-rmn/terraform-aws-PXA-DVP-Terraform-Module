@@ -49,7 +49,7 @@ resource "aws_iam_policy" "lambda_secrets_manager_policy" {
           Resource = "arn:aws:secretsmanager:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:secret:${local.pxa_prefix}-*"
         }
       ],
-      var.msk.existing.arn != null ? [
+      local.msk.arn != null ? [
         {
           Effect = "Allow"
           Action = [
@@ -60,9 +60,9 @@ resource "aws_iam_policy" "lambda_secrets_manager_policy" {
             "kafka-cluster:CreateTopic"
           ]
           Resource = [
-            var.msk.existing.arn,
-            "${replace(var.msk.existing.arn, ":cluster/", ":topic/")}/*",
-            "${replace(var.msk.existing.arn, ":cluster/", ":group/")}/*",
+            local.msk.arn,
+            "${replace(local.msk.arn, ":cluster/", ":topic/")}/*",
+            "${replace(local.msk.arn, ":cluster/", ":group/")}/*",
           ]
         }
       ] : []

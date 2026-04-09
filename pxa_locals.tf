@@ -18,7 +18,7 @@ locals {
   users = {
     "app" = merge(
       {},
-      var.msk.existing.arn != null ? {
+      local.msk.arn != null ? {
         "kafka-policy" = {
           "effect" = "Allow"
           "actions" = [
@@ -29,9 +29,9 @@ locals {
             "kafka-cluster:AlterGroup"
           ]
           "resource" = [
-            var.msk.existing.arn,
-            "${replace(var.msk.existing.arn, ":cluster/", ":topic/")}/*",
-            "${replace(var.msk.existing.arn, ":cluster/", ":group/")}/*",
+            local.msk.arn,
+            "${replace(local.msk.arn, ":cluster/", ":topic/")}/*",
+            "${replace(local.msk.arn, ":cluster/", ":group/")}/*",
           ]
         }
       } : {}
@@ -70,7 +70,10 @@ locals {
     }
   }
 
-  msk = { bootstrap_brokers = var.msk.create ? aws_msk_cluster.main[0].bootstrap_brokers : var.msk.existing.bootstrap_brokers }
+  msk = {
+    bootstrap_brokers = var.msk.create ? aws_msk_cluster.main[0].bootstrap_brokers : var.msk.existing.bootstrap_brokers
+    arn               = var.msk.create ? aws_msk_cluster.main[0].arn : try(var.msk.existing.arn, null)
+  }
 
   s3_users = flatten(
     [
