@@ -6,17 +6,36 @@ locals {
 
   ec2 = {
     security_groups : {
-      "ansible" : aws_security_group.ansible.id
-      "bastion" : aws_security_group.bastion.id
-      "cicd" : aws_security_group.cicd.id
-      "mongo" : aws_security_group.mongo.id
-      "dataflows" : aws_security_group.dataflows.id
+      "ansible" : try(aws_security_group.ansible[0].id, null)
+      "bastion" : try(aws_security_group.bastion[0].id, null)
+      "cicd" : try(aws_security_group.cicd[0].id, null)
+      "mongo" : try(aws_security_group.mongo[0].id, null)
+      "dataflows" : try(aws_security_group.dataflows[0].id, null)
       #"openvpn" : aws_security_group.openvpn.id
     }
   }
 
   users = {
-    "app"    = {}
+    "app" = merge(
+      {},
+      var.msk.existing.arn != null ? {
+        "kafka-policy" = {
+          "effect" = "Allow"
+          "actions" = [
+            "kafka-cluster:Connect",
+            "kafka-cluster:DescribeTopic",
+            "kafka-cluster:ReadData",
+            "kafka-cluster:DescribeGroup",
+            "kafka-cluster:AlterGroup"
+          ]
+          "resource" = [
+            var.msk.existing.arn,
+            "${replace(var.msk.existing.arn, ":cluster/", ":topic/")}/*",
+            "${replace(var.msk.existing.arn, ":cluster/", ":group/")}/*",
+          ]
+        }
+      } : {}
+    )
     "static" = {}
   }
 

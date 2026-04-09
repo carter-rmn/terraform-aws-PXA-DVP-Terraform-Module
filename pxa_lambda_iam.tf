@@ -37,26 +37,36 @@ resource "aws_iam_policy" "lambda_secrets_manager_policy" {
 
   policy = jsonencode({
     Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Action = [
-          "secretsmanager:GetSecretValue",
-          "secretsmanager:DescribeSecret",
-          "secretsmanager:ListSecrets"
-        ]
-        Resource = "arn:aws:secretsmanager:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:secret:${local.pxa_prefix}-*"
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "kafka-cluster:Connect",
-          "kafka-cluster:DescribeTopic",
-          "kafka-cluster:WriteData"
-        ]
-        Resource = "arn:aws:kafka:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:cluster/glb-shyftlabs-dev-msk-main/afb3f330-cc46-4c24-84fa-b765ea3bbe0e-s2"
-      }
-    ]
+    Statement = concat(
+      [
+        {
+          Effect = "Allow"
+          Action = [
+            "secretsmanager:GetSecretValue",
+            "secretsmanager:DescribeSecret",
+            "secretsmanager:ListSecrets"
+          ]
+          Resource = "arn:aws:secretsmanager:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:secret:${local.pxa_prefix}-*"
+        }
+      ],
+      var.msk.existing.arn != null ? [
+        {
+          Effect = "Allow"
+          Action = [
+            "kafka-cluster:Connect",
+            "kafka-cluster:DescribeTopic",
+            "kafka-cluster:WriteData",
+            "kafka-cluster:DescribeGroup",
+            "kafka-cluster:CreateTopic"
+          ]
+          Resource = [
+            var.msk.existing.arn,
+            "${replace(var.msk.existing.arn, ":cluster/", ":topic/")}/*",
+            "${replace(var.msk.existing.arn, ":cluster/", ":group/")}/*",
+          ]
+        }
+      ] : []
+    )
   })
 }
 
