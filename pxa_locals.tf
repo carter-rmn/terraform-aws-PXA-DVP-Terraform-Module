@@ -6,11 +6,11 @@ locals {
 
   ec2 = {
     security_groups : {
-      "ansible" : try(aws_security_group.ansible[0].id, null)
-      "bastion" : try(aws_security_group.bastion[0].id, null)
-      "cicd" : try(aws_security_group.cicd[0].id, null)
-      "mongo" : try(aws_security_group.mongo[0].id, null)
-      "dataflows" : try(aws_security_group.dataflows[0].id, null)
+      "ansible" : aws_security_group.ansible[0].id
+      "bastion" : aws_security_group.bastion[0].id
+      "cicd" : aws_security_group.cicd[0].id
+      "mongo" : aws_security_group.mongo[0].id
+      "dataflows" : aws_security_group.dataflows[0].id
       #"openvpn" : aws_security_group.openvpn.id
     }
   }
