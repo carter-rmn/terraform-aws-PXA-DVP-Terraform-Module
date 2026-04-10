@@ -15,13 +15,6 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
     keyspace = {
       name = try(aws_keyspaces_keyspace.carter_analytics[0].name, var.keyspace.existing.name)
     }
-    app_user = {
-      keyspaces = {
-        service_specific_credential_id = aws_iam_service_specific_credential.keyspaces_app_user.service_specific_credential_id
-        service_specific_credential    = aws_iam_service_specific_credential.keyspaces_app_user.service_password
-        username                       = aws_iam_service_specific_credential.keyspaces_app_user.service_user_name
-      }
-    }
     mongo = {
       pxa = {
         name        = local.databases.mongo.pxa.name

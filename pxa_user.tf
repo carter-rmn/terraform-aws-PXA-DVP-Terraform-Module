@@ -17,7 +17,7 @@
 #   depends_on = [aws_iam_user.users]
 # }
 
-resource "aws_iam_service_specific_credential" "keyspaces_app_user" {
-  user_name    = aws_iam_user.users["app"].name
-  service_name = "cassandra.amazonaws.com"
-}
+# resource "aws_iam_service_specific_credential" "keyspaces_app_user" {
+#   user_name    = aws_iam_user.users["app"].name
+#   service_name = "cassandra.amazonaws.com"
+# }
