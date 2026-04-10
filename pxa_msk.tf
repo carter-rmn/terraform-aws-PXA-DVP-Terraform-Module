@@ -59,7 +59,7 @@ resource "aws_cloudwatch_log_group" "main" {
 
 resource "aws_msk_configuration" "main" {
   count          = var.msk.create ? 1 : 0
-  kafka_versions = ["3.4.0"]
+  kafka_versions = ["3.6.0"]
   name           = "${local.pxa_prefix}-msk-main-config"
 
   server_properties = <<PROPERTIES
