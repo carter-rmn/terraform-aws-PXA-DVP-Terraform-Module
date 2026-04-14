@@ -43,9 +43,15 @@ resource "aws_iam_policy" "lambda_secrets_manager_policy" {
         Action = [
           "secretsmanager:GetSecretValue",
           "secretsmanager:DescribeSecret",
-          "secretsmanager:ListSecrets"
         ]
         Resource = "arn:aws:secretsmanager:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:secret:${local.pxa_prefix}-*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:ListSecrets"
+        ]
+        Resource = "*"
       }
     ]
   })
