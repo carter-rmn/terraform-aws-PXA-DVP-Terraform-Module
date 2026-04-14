@@ -16,26 +16,7 @@ locals {
   }
 
   users = {
-    "app" = merge(
-      {},
-      local.msk.arn != null ? {
-        "kafka-policy" = {
-          "effect" = "Allow"
-          "actions" = [
-            "kafka-cluster:Connect",
-            "kafka-cluster:DescribeTopic",
-            "kafka-cluster:ReadData",
-            "kafka-cluster:DescribeGroup",
-            "kafka-cluster:AlterGroup"
-          ]
-          "resource" = [
-            local.msk.arn,
-            "${replace(local.msk.arn, ":cluster/", ":topic/")}/*",
-            "${replace(local.msk.arn, ":cluster/", ":group/")}/*",
-          ]
-        }
-      } : {}
-    )
+    "app"    = {}
     "static" = {}
   }
 
