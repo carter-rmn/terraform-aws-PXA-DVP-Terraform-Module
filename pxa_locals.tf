@@ -21,7 +21,7 @@ locals {
   }
 
   s3s = {
-    static      = { publicly_readable = false, users = ["static"] }
+    static      = { publicly_readable = false, users = ["static", "app"] }
     assets      = { publicly_readable = false, users = ["app"] }
     geolocation = { publicly_readable = false, users = ["app"] }
   }
