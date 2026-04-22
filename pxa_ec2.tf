@@ -21,6 +21,8 @@ resource "aws_instance" "ec2s" {
   )
   associate_public_ip_address = each.value.public
 
+  iam_instance_profile = aws_iam_instance_profile.ec2[0].name
+
   depends_on = [aws_key_pair.ec2s]
 
   root_block_device {
