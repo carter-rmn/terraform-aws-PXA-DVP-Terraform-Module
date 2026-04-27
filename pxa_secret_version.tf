@@ -27,7 +27,7 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
           for user, username in local.databases.mongo.pxa.users : user => {
             username          = username
             password          = random_password.mongo["pxa_mongo_${user}"].result
-            connection_string = "mongodb://${username}:${random_password.mongo["pxa_mongo_${user}"].result}@${join(",", [for item in aws_instance.ec2s : "${item.private_ip}:${local.databases.mongo.port}" if length(regexall("(mongo-pxa-\\d+)", item.tags.Short)) > 0])}/${[local.databases.mongo.pxa.name](http://local.databases.mongo.pxa.name)}?authSource=admin${length([for item in aws_instance.ec2s : 1 if length(regexall("(mongo-pxa-\\d+)", item.tags.Short)) > 0]) > 1 ? "&replicaSet=rmn" : ""}"
+            connection_string = "mongodb://${username}:${random_password.mongo["pxa_mongo_${user}"].result}@${join(",", [for item in aws_instance.ec2s : "${item.private_ip}:${local.databases.mongo.port}" if length(regexall("(mongo-pxa-\\d+)", item.tags.Short)) > 0])}/${local.databases.mongo.pxa.name}?authSource=admin${length([for item in aws_instance.ec2s : 1 if length(regexall("(mongo-pxa-\\d+)", item.tags.Short)) > 0]) > 1 ? "&replicaSet=rmn" : ""}"
           }
         }
       }
