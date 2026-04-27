@@ -1,5 +1,10 @@
+data "aws_ssm_document" "existing" {
+  name            = "SSM-SessionManagerRunShell-Ubuntu"
+  document_format = "JSON"
+}
+
 resource "aws_ssm_document" "ssm_document" {
-  count           = length(var.ec2.instances) > 0 ? 1 : 0
+  count           = length(var.ec2.instances) > 0 && try(data.external.ssm_doc_check[0].result.exists, "false") == "false" ? 1 : 0
   name            = "SSM-SessionManagerRunShell-Ubuntu"
   document_type   = "Session"
   document_format = "JSON"
