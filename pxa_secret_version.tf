@@ -13,7 +13,7 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
       }
     }
     keyspace = {
-      name = try(aws_keyspaces_keyspace.carter_analytics[0].name, var.keyspace.existing.name)
+      name = var.keyspace.create ? aws_keyspaces_keyspace.carter_analytics[0].name : var.keyspace.existing.name
     }
     mongo = {
       pxa = {
