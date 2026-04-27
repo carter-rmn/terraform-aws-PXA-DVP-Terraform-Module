@@ -3,6 +3,7 @@ resource "aws_ssm_document" "ssm_document" {
   name            = "SSM-SessionManagerRunShell-Ubuntu"
   document_type   = "Session"
   document_format = "JSON"
+  update_existing = true 
   content = jsonencode({
     "schemaVersion" : "1.0",
     "description" : "Session Manager document for EC2 instances with ubuntu user",
