@@ -68,7 +68,7 @@ resource "aws_iam_policy" "ec2" {
           "ssm:StartSession"
         ],
         Resource = concat(
-          [aws_ssm_document.ssm_document[0].arn],
+          compact([local.ssm_document_arn]),
           [
             for key, instance in aws_instance.ec2s :
             "arn:aws:ec2:${var.AWS_REGION}:${data.aws_caller_identity.current.account_id}:instance/${instance.id}"
