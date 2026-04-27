@@ -15,23 +15,23 @@ resource "aws_secretsmanager_secret_version" "pxa_secret_terraform" {
     keyspace = {
       name = var.keyspace.create ? aws_keyspaces_keyspace.carter_analytics[0].name : var.keyspace.existing.name
     }
-    mongo = {
+    mongo = contains(keys(aws_instance.ec2s), "mongo-pxa-1") ? {
       pxa = {
         name        = local.databases.mongo.pxa.name
         port        = local.databases.mongo.port
-        private_ip  = try(aws_instance.ec2s["mongo-pxa-1"].private_ip, null)
-        private_dns = try(aws_instance.ec2s["mongo-pxa-1"].private_dns, null)
-        public_dns  = try(aws_instance.ec2s["mongo-pxa-1"].public_dns, null)
-        public_ip   = try(aws_instance.ec2s["mongo-pxa-1"].public_ip, null)
+        private_ip  = aws_instance.ec2s["mongo-pxa-1"].private_ip
+        private_dns = aws_instance.ec2s["mongo-pxa-1"].private_dns
+        public_dns  = aws_instance.ec2s["mongo-pxa-1"].public_dns
+        public_ip   = aws_instance.ec2s["mongo-pxa-1"].public_ip
         users = {
           for user, username in local.databases.mongo.pxa.users : user => {
             username          = username
             password          = random_password.mongo["pxa_mongo_${user}"].result
-            connection_string = "mongodb://${username}:${random_password.mongo["pxa_mongo_${user}"].result}@${join(",", [for item in aws_instance.ec2s : "${item.private_ip}:${local.databases.mongo.port}" if length(regexall("(mongo-pxa-\\d+)", item.tags.Short)) > 0])}/${local.databases.mongo.pxa.name}?authSource=admin${length([for item in aws_instance.ec2s : 1 if length(regexall("(mongo-pxa-\\d+)", item.tags.Short)) > 0]) > 1 ? "&replicaSet=rmn" : ""}"
+            connection_string = "mongodb://${username}:${random_password.mongo["pxa_mongo_${user}"].result}@${join(",", [for item in aws_instance.ec2s : "${item.private_ip}:${local.databases.mongo.port}" if length(regexall("(mongo-pxa-\\d+)", item.tags.Short)) > 0])}/${[local.databases.mongo.pxa.name](http://local.databases.mongo.pxa.name)}?authSource=admin${length([for item in aws_instance.ec2s : 1 if length(regexall("(mongo-pxa-\\d+)", item.tags.Short)) > 0]) > 1 ? "&replicaSet=rmn" : ""}"
           }
         }
       }
-    }
+    } : {}
     ecr = {
       domain = element(split("/", aws_ecr_repository.ecrs["api"].repository_url), 0)
     }
