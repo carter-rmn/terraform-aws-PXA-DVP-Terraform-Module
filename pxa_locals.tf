@@ -15,6 +15,12 @@ locals {
     }
   }
 
+  ssm_document_arn = try(
+    aws_ssm_document.ssm_document[0].arn,
+    data.aws_ssm_document.existing[0].arn,
+    null
+  )
+
   users = {
     "app"    = {}
     "static" = {}
