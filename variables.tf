@@ -50,20 +50,6 @@ variable "msk" {
   })
 }
 
-variable "msk_alerting" {
-  type = object({
-    enabled          = bool
-    slack_team_id    = string
-    slack_channel_id = string
-  })
-
-  default = {
-    enabled          = false
-    slack_team_id    = ""
-    slack_channel_id = ""
-  }
-}
-
 variable "keyspace" {
   type = object({
     create = bool
