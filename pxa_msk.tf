@@ -44,6 +44,33 @@ resource "aws_msk_cluster" "main" {
   }
 }
 
+resource "aws_appautoscaling_target" "msk_storage" {
+  count = var.msk.create && var.msk.new.storage_autoscaling.enabled ? 1 : 0
+
+  service_namespace  = "kafka"
+  scalable_dimension = "kafka:broker-storage:VolumeSize"
+  resource_id        = aws_msk_cluster.main[0].arn
+  min_capacity       = var.msk.new.volume_size
+  max_capacity       = var.msk.new.storage_autoscaling.max_volume_size_gb
+}
+
+resource "aws_appautoscaling_policy" "msk_storage" {
+  count = var.msk.create && var.msk.new.storage_autoscaling.enabled ? 1 : 0
+
+  name               = "${local.pxa_prefix}-msk-main-storage-autoscaling"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.msk_storage[0].resource_id
+  scalable_dimension = aws_appautoscaling_target.msk_storage[0].scalable_dimension
+  service_namespace  = aws_appautoscaling_target.msk_storage[0].service_namespace
+
+  target_tracking_scaling_policy_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "KafkaBrokerStorageUtilization"
+    }
+    target_value = var.msk.new.storage_autoscaling.target_utilization_percent
+  }
+}
+
 resource "aws_cloudwatch_log_group" "main" {
   count = var.msk.create ? 1 : 0
   name  = "/aws/msk/${local.pxa_prefix}"
