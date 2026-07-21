@@ -42,6 +42,11 @@ variable "msk" {
       instance_type          = string
       number_of_broker_nodes = number
       volume_size            = number
+      storage_autoscaling = object({
+        enabled                     = bool
+        max_volume_size_gb          = number
+        target_utilization_percent = number
+      })
     })
     existing = object({
       bootstrap_brokers = string
