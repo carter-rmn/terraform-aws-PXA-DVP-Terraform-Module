@@ -16,13 +16,13 @@ resource "aws_lambda_function" "event" {
     aws_lambda_layer_version.event_layer.arn,
   ]
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-lambda-event"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 resource "aws_lambda_layer_version" "event_layer" {

@@ -22,13 +22,13 @@ resource "aws_iam_role" "ebs_csi_driver" {
     ]
   })
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-ebs-csi-driver-role"
     Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 # Attach AWS-managed EBS CSI Driver Policy
@@ -62,13 +62,13 @@ resource "aws_iam_role" "efs_csi_driver" {
     ]
   })
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-efs-csi-driver-role"
     Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 # Attach AWS-managed EFS CSI Driver Policy
@@ -114,13 +114,13 @@ resource "aws_iam_policy" "mountpoint_s3_csi_driver" {
    ]
 }
 EOF
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-iam-policy-mountpoint-s3-csi-driver"
     Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 # IAM Role for S3 CSI Driver
@@ -147,13 +147,13 @@ resource "aws_iam_role" "mountpoint_s3_csi_driver" {
     ]
   })
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-mountpoint-s3-csi-driver-role"
     Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 # Attach AWS-managed S3 CSI Driver Policy

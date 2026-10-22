@@ -6,11 +6,11 @@ resource "aws_eks_pod_identity_association" "apps" {
   service_account = "${local.pxa_prefix}-${each.key}"
   role_arn        = aws_iam_role.app_role_eks[each.value.role_key].arn
 
-  tags = {
-    Name = "${local.pxa_prefix}-pod-identity-${each.key}"
+  tags = merge(local.mandatory_tags_without_protected_keys, {
+    Name        = "${local.pxa_prefix}-pod-identity-${each.key}"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }

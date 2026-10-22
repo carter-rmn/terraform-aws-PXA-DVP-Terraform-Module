@@ -15,13 +15,13 @@ resource "aws_iam_role" "eks_main_node_group" {
     ]
   })
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-iam-role-eks-node"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = "true"
-  }
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "eks_worker_node" {
@@ -71,6 +71,7 @@ resource "aws_iam_policy" "s3_access" {
       }
     ]
   })
+  tags = local.mandatory_tags_without_protected_keys
 }
 
 resource "aws_iam_role_policy_attachment" "s3_access" {
@@ -98,6 +99,7 @@ resource "aws_iam_policy" "secrets_manager_read" {
       }
     ]
   })
+  tags = local.mandatory_tags_without_protected_keys
 }
 
 resource "aws_iam_role_policy_attachment" "secrets_manager_read" {
@@ -132,6 +134,7 @@ resource "aws_iam_policy" "keyspaces_access" {
       }
     ]
   })
+  tags = local.mandatory_tags_without_protected_keys
 }
 
 resource "aws_iam_role_policy_attachment" "keyspaces_access" {

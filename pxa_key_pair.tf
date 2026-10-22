@@ -10,11 +10,11 @@ resource "aws_key_pair" "ec2s" {
   public_key = tls_private_key.ec2s[each.key].public_key_openssh
   depends_on = [aws_secretsmanager_secret.ec2s]
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-ec2-${each.key}"
     Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }

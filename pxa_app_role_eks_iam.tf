@@ -24,13 +24,13 @@ resource "aws_iam_role" "app_role_eks" {
   name               = "${local.pxa_prefix}-iam-role-app-${each.key}"
   assume_role_policy = data.aws_iam_policy_document.pod_identity_assume_role[each.key].json
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-iam-role-app-${each.key}"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 # Create custom policies for application roles (if they have specific actions defined)
@@ -55,13 +55,13 @@ resource "aws_iam_policy" "app_role_policies" {
     ])
   })
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-iam-policy-app-${each.key}"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 # Attach custom policies to roles

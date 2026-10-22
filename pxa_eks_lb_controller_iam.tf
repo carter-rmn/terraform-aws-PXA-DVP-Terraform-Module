@@ -6,13 +6,13 @@ resource "aws_iam_role" "lb_controller" {
     ignore_changes = [assume_role_policy]
   }
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-iam-role-lb-controller"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 resource "aws_iam_policy" "policy_lb_controller" {
@@ -20,13 +20,13 @@ resource "aws_iam_policy" "policy_lb_controller" {
   name   = "${local.pxa_prefix}-iam-policy-lb-controller"
   policy = file("${path.module}/data/AWSLoadBalancerController.json")
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-iam-policy-lb-controller"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "lb_controller" {

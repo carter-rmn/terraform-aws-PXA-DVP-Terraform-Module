@@ -33,13 +33,13 @@ resource "aws_iam_policy" "app_role_s3" {
     ]
   })
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-iam-policy-s3-app-role-${each.value.name}-${each.value.user}-policy"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "app_role_s3" {

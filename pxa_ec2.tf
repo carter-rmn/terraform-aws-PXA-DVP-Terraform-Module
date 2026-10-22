@@ -29,21 +29,21 @@ resource "aws_instance" "ec2s" {
     volume_size = each.value.volume_size
     volume_type = each.value.volume_type
 
-    tags = {
+    tags = merge(local.mandatory_tags_without_protected_keys, {
       Name        = "${local.pxa_prefix}-ebs-${each.key}-default"
       Project     = "${local.pxa_project_name}"
       Customer    = var.PROJECT_CUSTOMER
       Environment = var.PROJECT_ENV
       Terraform   = true
-    }
+    })
   }
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-ec2-${each.key}"
     Short       = "${each.key}"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }

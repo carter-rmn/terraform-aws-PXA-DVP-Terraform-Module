@@ -1,14 +1,14 @@
 resource "aws_keyspaces_keyspace" "carter_analytics" {
-  count                     = var.keyspace.create ? 1 : 0
-  name = replace("${local.pxa_prefix}-keyspace-carter-analytics", "-", "_")
+  count = var.keyspace.create ? 1 : 0
+  name  = replace("${local.pxa_prefix}-keyspace-carter-analytics", "-", "_")
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-keyspace-carter-analytics"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 resource "aws_keyspaces_table" "carter_analytics_events" {
@@ -17,18 +17,18 @@ resource "aws_keyspaces_table" "carter_analytics_events" {
   table_name    = "carter_analytics_events"
 
   lifecycle {
-  ignore_changes = [schema_definition]
-}
+    ignore_changes = [schema_definition]
+  }
   schema_definition {
     partition_key {
       name = "client_id"
     }
     clustering_key {
-      name = "created_at"
+      name     = "created_at"
       order_by = "DESC"
     }
     clustering_key {
-      name = "event_id"
+      name     = "event_id"
       order_by = "ASC"
     }
     column {
@@ -89,11 +89,11 @@ resource "aws_keyspaces_table" "carter_analytics_events" {
     status = "ENABLED"
   }
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-keyspace-table-carter-analytics-events"
     Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }

@@ -14,33 +14,33 @@ resource "aws_launch_template" "eks_main_node_group" {
 
   tag_specifications {
     resource_type = "instance"
-    tags = {
+    tags = merge(local.mandatory_tags_without_protected_keys, {
       Name        = "${local.pxa_prefix}-eks-main-node"
       Project     = "${local.pxa_project_name}"
       Customer    = var.PROJECT_CUSTOMER
       Environment = var.PROJECT_ENV
       Terraform   = "true"
-    }
+    })
   }
 
   tag_specifications {
     resource_type = "volume"
-    tags = {
+    tags = merge(local.mandatory_tags_without_protected_keys, {
       Name        = "${local.pxa_prefix}-eks-main-node-volume"
       Project     = "${local.pxa_project_name}"
       Customer    = var.PROJECT_CUSTOMER
       Environment = var.PROJECT_ENV
       Terraform   = "true"
-    }
+    })
   }
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-eks-main-launch-template"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = "true"
-  }
+  })
 }
 
 resource "aws_eks_node_group" "eks_main" {
@@ -65,11 +65,11 @@ resource "aws_eks_node_group" "eks_main" {
     "nodegroup" = "${local.pxa_prefix}-node-group"
   }
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-eks-node-group-main"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = "true"
-  }
+  })
 }

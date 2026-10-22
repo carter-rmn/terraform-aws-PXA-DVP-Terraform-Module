@@ -14,6 +14,7 @@ resource "aws_iam_role" "ec2" {
       }
     ]
   })
+  tags = local.mandatory_tags_without_protected_keys
 }
 
 resource "aws_iam_policy" "ec2" {
@@ -77,6 +78,7 @@ resource "aws_iam_policy" "ec2" {
       }
     ]
   })
+  tags = local.mandatory_tags_without_protected_keys
 }
 
 resource "aws_iam_role_policy_attachment" "ec2" {
@@ -95,4 +97,5 @@ resource "aws_iam_instance_profile" "ec2" {
   count = length(var.ec2.instances) > 0 ? 1 : 0
   name  = "${local.pxa_prefix}-instance-profile-ec2"
   role  = aws_iam_role.ec2[0].name
+  tags  = local.mandatory_tags_without_protected_keys
 }
