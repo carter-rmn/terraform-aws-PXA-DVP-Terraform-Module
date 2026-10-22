@@ -1,12 +1,12 @@
 resource "aws_api_gateway_rest_api" "api_gateway" {
   name = "${local.pxa_prefix}-api-gateway-event"
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-api-gateway-event"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 # /api
@@ -272,10 +272,10 @@ resource "aws_api_gateway_method_response" "event_options_200" {
 }
 
 resource "aws_api_gateway_integration" "event_options_integration" {
-  rest_api_id             = aws_api_gateway_rest_api.api_gateway.id
-  resource_id             = aws_api_gateway_resource.event.id
-  http_method             = aws_api_gateway_method.event_options.http_method
-  type                    = "MOCK"
+  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
+  resource_id = aws_api_gateway_resource.event.id
+  http_method = aws_api_gateway_method.event_options.http_method
+  type        = "MOCK"
 
   request_templates = {
     "application/json" = "{\"statusCode\": 200}"
@@ -325,10 +325,10 @@ resource "aws_api_gateway_method_response" "authenticate_options_200" {
 }
 
 resource "aws_api_gateway_integration" "authenticate_options_integration" {
-  rest_api_id             = aws_api_gateway_rest_api.api_gateway.id
-  resource_id             = aws_api_gateway_resource.authenticate_resource.id
-  http_method             = aws_api_gateway_method.authenticate_options.http_method
-  type                    = "MOCK"
+  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
+  resource_id = aws_api_gateway_resource.authenticate_resource.id
+  http_method = aws_api_gateway_method.authenticate_options.http_method
+  type        = "MOCK"
 
   request_templates = {
     "application/json" = "{\"statusCode\": 200}"
@@ -375,11 +375,11 @@ resource "aws_api_gateway_stage" "dev_stage" {
   deployment_id = aws_api_gateway_deployment.deployment.id
   stage_name    = "dev"
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-event-api-dev"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }

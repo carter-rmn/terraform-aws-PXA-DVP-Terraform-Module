@@ -10,13 +10,13 @@ resource "aws_eks_cluster" "main" {
     subnet_ids             = var.vpc.subnets.private
   }
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-eks-main"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 # data "aws_eks_cluster_auth" "eks" {

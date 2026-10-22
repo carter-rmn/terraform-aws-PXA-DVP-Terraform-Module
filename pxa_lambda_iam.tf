@@ -12,13 +12,13 @@ resource "aws_iam_role" "lambda" {
       }
     ]
   })
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-lambda-role"
     Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
@@ -55,6 +55,7 @@ resource "aws_iam_policy" "lambda_secrets_manager_policy" {
       }
     ]
   })
+  tags = local.mandatory_tags_without_protected_keys
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_secrets_manager_attachment" {

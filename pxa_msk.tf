@@ -35,13 +35,13 @@ resource "aws_msk_cluster" "main" {
     unauthenticated = true
   }
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-msk-main"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 resource "aws_appautoscaling_target" "msk_storage" {
@@ -52,6 +52,8 @@ resource "aws_appautoscaling_target" "msk_storage" {
   resource_id        = aws_msk_cluster.main[0].arn
   min_capacity       = var.msk.new.storage_autoscaling.min_capacity
   max_capacity       = var.msk.new.storage_autoscaling.max_volume_size_gb
+
+  tags = local.mandatory_tags_without_protected_keys
 }
 
 resource "aws_appautoscaling_policy" "msk_storage" {
@@ -75,13 +77,13 @@ resource "aws_cloudwatch_log_group" "main" {
   count = var.msk.create ? 1 : 0
   name  = "/aws/msk/${local.pxa_prefix}"
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-lg-msk-main"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 resource "aws_msk_configuration" "main" {

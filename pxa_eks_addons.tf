@@ -10,13 +10,13 @@ resource "aws_eks_addon" "ebs_csi_driver" {
     aws_iam_role_policy_attachment.ebs_csi_driver
   ]
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-ebs-csi-driver-addon"
     Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 # EFS CSI Driver Addon
@@ -31,13 +31,13 @@ resource "aws_eks_addon" "efs_csi_driver" {
     aws_iam_role_policy_attachment.efs_csi_driver
   ]
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-efs-csi-driver-addon"
     Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 # S3 CSI Driver Addon
@@ -52,11 +52,11 @@ resource "aws_eks_addon" "mountpoint_s3_csi_driver" {
     aws_iam_role_policy_attachment.mountpoint_s3_csi_driver
   ]
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-mountpoint-s3-csi-driver-addon"
     Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }

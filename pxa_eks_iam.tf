@@ -15,13 +15,13 @@ resource "aws_iam_role" "eks_main" {
     ]
   })
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-iam-role-eks"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "eks_cluster" {

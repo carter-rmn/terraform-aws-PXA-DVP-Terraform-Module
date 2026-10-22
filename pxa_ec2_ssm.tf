@@ -31,4 +31,6 @@ resource "aws_ssm_document" "ssm_document" {
       }
     }
   })
+
+  tags = local.mandatory_tags_without_protected_keys
 }

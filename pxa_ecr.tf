@@ -7,13 +7,13 @@ resource "aws_ecr_repository" "ecrs" {
     scan_on_push = true
   }
 
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-ecr-${each.key}"
     Project     = "${local.pxa_project_name}"
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 resource "aws_ecr_lifecycle_policy" "ecr_policy" {

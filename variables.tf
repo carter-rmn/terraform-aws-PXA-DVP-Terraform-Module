@@ -13,6 +13,12 @@ variable "PROJECT_CUSTOMER" {}
 variable "PROJECT_ENV" {}
 variable "PROJECT_PRENAME" {}
 
+variable "mandatory_tags" {
+  type        = map(string)
+  description = "Additional mandatory tags to apply to supported AWS resources."
+  default     = {}
+}
+
 variable "vpc" {
   type = object({
     id = string
@@ -43,9 +49,9 @@ variable "msk" {
       number_of_broker_nodes = number
       volume_size            = number
       storage_autoscaling = object({
-        enabled                     = bool
-        min_capacity                = number
-        max_volume_size_gb          = number
+        enabled                    = bool
+        min_capacity               = number
+        max_volume_size_gb         = number
         target_utilization_percent = number
       })
     })

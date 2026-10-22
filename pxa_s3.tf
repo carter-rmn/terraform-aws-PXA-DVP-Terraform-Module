@@ -1,13 +1,13 @@
 resource "aws_s3_bucket" "s3s" {
   for_each = local.s3s
   bucket   = "${local.pxa_prefix}-s3-${each.key}"
-  tags = {
+  tags = merge(local.mandatory_tags_without_protected_keys, {
     Name        = "${local.pxa_prefix}-s3-${each.key}"
     Project     = local.pxa_project_name
     Customer    = var.PROJECT_CUSTOMER
     Environment = var.PROJECT_ENV
     Terraform   = true
-  }
+  })
 }
 
 resource "aws_s3_bucket_public_access_block" "s3s" {
