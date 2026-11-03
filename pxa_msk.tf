@@ -1,7 +1,7 @@
 resource "aws_msk_cluster" "main" {
   count                  = var.msk.create ? 1 : 0
   cluster_name           = "${local.pxa_prefix}-msk-main"
-  kafka_version          = "3.9.0"
+  kafka_version          = "3.9.x"
   number_of_broker_nodes = var.msk.new.number_of_broker_nodes
 
   broker_node_group_info {
